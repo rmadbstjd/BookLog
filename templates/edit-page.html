@@ -2,6 +2,14 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
+    <title>북로그 수정</title>
+    <!-- JQuery & Bootstrap import -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -12,143 +20,21 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
-    <!-- JQuery를 import 합니다 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-    <title>북로그 수정</title>
 
-    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"
-    />
-    <script type="text/javascript"></script>
+    <!-- Local CSS & JS import -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <script src="{{ url_for("static", filename="script.js") }}"></script>
   </head>
+
   <body>
     <div class="header">
       <button type="button" class="btn btn-secondary">로그인</button>
       <button type="button" class="btn btn-secondary">회원가입</button>
     </div>
-    <h1 class="MainTitle">BookLog 작성</h1>
-    <div class="body container">
-      <div class="row row-cols-1 row-cols-md-3">
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <span><h5 class="card-title name">불편한 편의점</h5></span>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">편한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">싼편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">불친절한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">집앞 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">비싼 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">이상한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">이웃집 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
+    <div class="container-fluid">
+      <h1 class="MainTitle">BookLog 작성</h1>
     </div>
-    <div class="footer">
-      <p>바닥</p>
-    </div>
+
   </body>
+
 </html>

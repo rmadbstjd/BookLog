@@ -1,5 +1,6 @@
 .header {
   display: flex;
+  margin-bottom: 40px;
 }
 .btn-secondary {
   justify-content: flex-end;
