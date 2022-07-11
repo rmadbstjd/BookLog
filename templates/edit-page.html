@@ -8,7 +8,6 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-
     <link
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
@@ -21,113 +20,18 @@
       crossorigin="anonymous"
     ></script>
     <title>북로그 수정</title>
+
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"
+    />
+    <script type="text/javascript"></script>
   </head>
-  <style>
-    .header {
-      display: flex;
-    }
-    .btn-secondary {
-      justify-content: flex-end;
-      margin: 3px 3px 3px 6px;
-    }
-
-    .MainTitle {
-      text-align: center;
-    }
-
-    .body {
-      max-width: 1600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .body > p {
-      text-align: center;
-    }
-
-    .col {
-      width: 300px;
-      height: 400px;
-      margin: 50px;
-      margin-bottom: 50px;
-    }
-
-    .col > a {
-      text-decoration: none;
-      color: black;
-    }
-
-    .card {
-      border-radius: 10px;
-    }
-
-    .card > img {
-      width: 252px;
-      height: 373px;
-      object-fit: cover;
-
-      display: block;
-      margin: auto;
-      margin-top: 12px;
-
-      border-radius: 10px;
-    }
-  </style>
-  <script type="text/javascript">
-    function filter() {
-      var value, name, item, i;
-
-      value = document.getElementById("value").value.toUpperCase();
-      item = document.getElementsByClassName("item");
-
-      for (i = 0; i < item.length; i++) {
-        name = item[i].getElementsByClassName("name");
-        if (name[0].innerHTML.toUpperCase().indexOf(value) > -1) {
-          item[i].style.display = "flex";
-        } else {
-          // item[i].style.display = "none";
-          let colelements = item[i].parentElement.parentElement.parentElement;
-          colelements.style.display = "none";
-        }
-      }
-    }
-
-    // document.getElementById("value").addEventListener("keyup", function (e) {
-    //   if (e.keyCode === 13) {
-    //     document.getElementById("inputbtn").click();
-    //   }
-    // });
-  </script>
   <body>
     <div class="header">
       <button type="button" class="btn btn-secondary">로그인</button>
       <button type="button" class="btn btn-secondary">회원가입</button>
     </div>
-    <h1 class="MainTitle">BookLog</h1>
-    <body>
-      <div class="searchbox">
-        <div class="header">
-          <input type="text" id="value" placeholder="Type to Search" />
-          <button
-            onclick="filter()"
-            id="inputbtn"
-            class="btn btn-secondary filterbtn"
-          >
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </button>
-          <button
-            type="button"
-            onclick="window.location.href='/'"
-            class="btn btn-secondary filterbtn"
-          >
-            <i class="fa fa-home" aria-hidden="true"></i>
-          </button>
-          <button type="button" class="btn btn-secondary">작성</button>
-        </div>
-      </div>
-    </body>
+    <h1 class="MainTitle">BookLog 작성</h1>
     <div class="body container">
-      <!-- <p>검색</p> -->
       <div class="row row-cols-1 row-cols-md-3">
         <div class="col">
           <a href="/">
