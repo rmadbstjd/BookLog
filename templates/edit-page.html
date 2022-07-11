@@ -27,12 +27,62 @@
   </head>
 
   <body>
-    <div class="header">
+    <div class="header mb-5 ">
       <button type="button" class="btn btn-secondary">로그인</button>
       <button type="button" class="btn btn-secondary">회원가입</button>
     </div>
-    <div class="container-fluid">
-      <h1 class="MainTitle">BookLog 작성</h1>
+
+    <div class="container-fluid mb-5 ">
+      <h1 class="MainTitle mb-5 ">BookLog 작성</h1>
+    </div>
+
+    <div class="container mt-5">
+      <form class="mb-5">
+        <label for="booknameSearch" class="form-label">네이버 도서 검색</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="booknameSearch" placeholder="도서명">
+          <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-bs-toggle="modal" data-bs-target="#exampleModal">도서 검색</button>
+        </div>
+      </form>
+      <!-- 네이버 책 API 활용 예정 : https://developers.naver.com/apps/#/register?defaultScope=search -->
+
+      <form>
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">책제목</label>
+          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="책 제목을 적어주세요">
+        </div>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">책 감상평</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea>
+        </div>
+        <div class="mb-3 text-center">
+        <button type="submit" class="btn btn-primary">등록</button>
+        <button type="button" class="btn btn-secondary">뒤로 가기</button>
+        </div>
+      </form>
+
+      <!-- Modal -->
+
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">도서 검색 결과</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              네이버 api 검색결과 노출 예정
+              https://developers.naver.com/apps/#/register?defaultScope=search
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary">검색결과 선택</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
     </div>
 
   </body>
