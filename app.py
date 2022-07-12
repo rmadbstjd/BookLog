@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
 from datetime import datetime
-from urllib import parse
 import requests
 import json
 
@@ -27,19 +26,35 @@ def detail():
 def edit_page():
     return render_template("edit-page.html")
 
+# (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
+@app.route('/api/<isbn>')
+def find_bookdetail_via_isbn(isbn):
+    
+    # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
+    print(isbn.split()[-1])
+    header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
+    r = requests.get('https://openapi.naver.com/v1/search/book_adv.xml?d_isbn='+str(isbn.split()[-1]), headers=header_info)
+    result = r.json()
+    print(result)
+    
+    return render_template("edit-page.html", isbn=result)
 
+# (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
 @app.route('/api/call-bookinfo', methods=['POST'])
-def giv_bookInfo():
+def give_bookInfo():
 
     data = str(request.data)
-    query = parse.parse_qs(data.query)
+    print(data)
+    
     # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
     header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
-    r = requests.get("https://openapi.naver.com/v1/search/book.json?query="+query, headers=header_info)
+
+    r = requests.get('https://openapi.naver.com/v1/search/book.json?query=데이터', headers=header_info)
     result = r.json()
+    
     return result
 
-
+# 작성된 리뷰를 저장
 @app.route('/save-review', methods=['POST'])
 def save_review():
 

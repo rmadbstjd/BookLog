@@ -46,15 +46,16 @@
       /* 모달을 열자 */
 
       function booksearch_listing() {
-        /* 관련 책자 찾아서 데이터로 받아 보기 */ 
 
+        /* 관련 책자 찾아서 데이터로 받아 보기 */ 
         var data = $('#booknameSearch').val();
+
         $.ajax({
           type: "POST",
           url: "/api/call-bookinfo",
           data: data,
           cache: false,
-          contentType: false,
+          contentType: 'application/json; charset=UTF-8',
           processData: false,
           success: function (response) {
             console.log(response)
@@ -63,53 +64,27 @@
               let title = response.items[i]["title"];
               let author = response.items[i]["author"];
               let isbn = response.items[i]["isbn"];
+              console.log(isbn)
               let image_url = response.items[i]["image"];
 
               let temp_html = `<tr>
                                   <th scope="row">1</th>
                                   <td>${title}</td>
                                   <td>${author}</td>
-                                  <td><button type="button" class="btn btn-primary"
-                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                  <td><a  type="button" class="btn btn-primary"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="/api/${isbn}" >
                               선택
-                            </button></td>
+                            </a></td>
                                 </tr>`;
                                 
               $("#selectData_table").append(temp_html);
+              console.log(data)
             }
           },
         });
-
-
 
       } 
 
-      /* function listing() {
-        $.ajax({
-          type: "GET",
-          url: "/diary",
-          data: {},
-          success: function (response) {
-            let diaries = response["all_diary"];
-            for (let i = 0; i < diaries.length; i++) {
-              let title = diaries[i]["title"];
-              let content = diaries[i]["content"];
-              let file = diaries[i]["file"];
-              let time = diaries[i]["time"];
-
-              let temp_html = `<div class="card">
-                                            <img src="../static/${file}" class="card-img-top">
-                                            <div class="card-body">
-                                                <h5 class="card-title">${title}</h5>
-                                                <p class="card-text">${content}</p>
-                                                <p class="save-date">${time}</p>
-                                            </div>
-                                        </div>`;
-              $("#cards-box").append(temp_html);
-            }
-          },
-        });
-      } */
 
       function posting() {
 
