@@ -142,6 +142,7 @@
     //   }
     // });
 
+    let nickname = {{ nickname }}
     function listing() {
       $.ajax({
         type: "GET",
@@ -149,13 +150,12 @@
         data: {},
         success: function (response) {
           let rows = response["books"];
-          console.log(rows);
-
           for (let i = 0; i < rows.length; i++) {
             let content = rows[i]["content"];
             let file = rows[i]["file"];
             let title = rows[i]["title"];
             let time = rows[i]["time"];
+            let nickname = "nickname";
 
             let temp_html = `<div class="col">
                                 <a href="/">
@@ -168,7 +168,7 @@
                                     <div class="card-body item">
                                       <span><h5 class="card-title name">${title}</h5></span>
                                       <hr>
-                                      <p>닉네임</p>
+                                      <p>${nickname}</p>
                                     </div>
                                   </div>
                                 </a>
@@ -179,6 +179,8 @@
       });
     }
 
+    // .encode('ascii', 'ignore').decode(utf-8)
+
     function WriteNote() {
       window.location.href = "/edit-page";
     }
@@ -186,7 +188,7 @@
   <body>
     <div class="header">
       <div class="topbtn">
-        <a>ㅇㅇㅇ님</a>
+        <a>{{ nickname }}님</a>
         <button
           type="button"
           class="btn btn-secondary"
