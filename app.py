@@ -1,8 +1,11 @@
+from dataclasses import dataclass
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
 from datetime import datetime
+from urllib import parse
+import requests
+import json
 
-# import requests
 
 app = Flask(__name__)
 
@@ -24,6 +27,19 @@ def detail():
 def edit_page():
     return render_template("edit-page.html")
 
+
+@app.route('/api/call-bookinfo', methods=['POST'])
+def giv_bookInfo():
+
+    data = str(request.data)
+    query = parse.parse_qs(data.query)
+    # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
+    header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
+    r = requests.get("https://openapi.naver.com/v1/search/book.json?query="+query, headers=header_info)
+    result = r.json()
+    return result
+
+
 @app.route('/save-review', methods=['POST'])
 def save_review():
 
@@ -38,7 +54,7 @@ def save_review():
     today = datetime.now()
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
     filename = f'file-{mytime}'
-    imgfile.save(f'static/{filename}.{extension}')
+    imgfile.save(f'static/books_pic/{filename}.{extension}')
     
     print("test-log", filename, mytime, extension)
 
@@ -68,7 +84,7 @@ def register():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5040, debug=True)
+    app.run('0.0.0.0', port=5000, debug=True)
 
 # @app.route('/detail/<keyword>')
 # def detail(keyword):

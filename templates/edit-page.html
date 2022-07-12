@@ -38,11 +38,51 @@
           $("#text-contents.body-contents").html(data);
       }); */
 
-
       $(document).ready(function () {
         bsCustomFileInput.init();
         //listing();
       });
+
+      /* 모달을 열자 */
+
+      function booksearch_listing() {
+        /* 관련 책자 찾아서 데이터로 받아 보기 */ 
+
+        var data = $('#booknameSearch').val();
+        $.ajax({
+          type: "POST",
+          url: "/api/call-bookinfo",
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            console.log(response)
+            $("#selectData_table").empty();
+            for (let i = 0; i < response.items.length; i++) {
+              let title = response.items[i]["title"];
+              let author = response.items[i]["author"];
+              let isbn = response.items[i]["isbn"];
+              let image_url = response.items[i]["image"];
+
+              let temp_html = `<tr>
+                                  <th scope="row">1</th>
+                                  <td>${title}</td>
+                                  <td>${author}</td>
+                                  <td><button type="button" class="btn btn-primary"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                              선택
+                            </button></td>
+                                </tr>`;
+                                
+              $("#selectData_table").append(temp_html);
+            }
+          },
+        });
+
+
+
+      } 
 
       /* function listing() {
         $.ajax({
@@ -121,14 +161,12 @@
         <label for="booknameSearch" class="form-label">네이버 도서 검색</label>
         <div class="input-group mb-3">
           <input type="text" class="form-control" id="booknameSearch" placeholder="도서명">
-          <button class="btn btn-outline-secondary" type="button" id="button-to-openmodal" data-bs-toggle="modal" data-bs-target="#exampleModal">도서 검색</button>
+          <button class="btn btn-outline-secondary" type="button" id="button-to-openmodal" onclick="booksearch_listing();" data-bs-toggle="modal" data-bs-target="#exampleModal" >도서 검색</button>
+          <!-- <button class="btn btn-outline-secondary" type="button" id="button-to-openmodal" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="booksearch_listing()">도서 검색</button> -->
         </div>
       </form>
 
-
-
       <form>
-
         <div class="mb-3">
           <label for="imgfile" class="form-label">사진 선택하기</label>
           <input type="file" class="form-control" id="imgfile" />
@@ -150,7 +188,7 @@
 
       <!-- Modal -->
 
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade modal-xl	" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
@@ -158,8 +196,19 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              네이버 api 검색결과 노출 예정
-              https://developers.naver.com/apps/#/register?defaultScope=search
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">저자</th>
+                    <th scope="col">선택</th>
+                  </tr>
+                </thead>
+                <tbody id="selectData_table">
+                </tbody>
+              </table>
+              
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
