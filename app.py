@@ -33,7 +33,6 @@ def find_bookdetail_via_isbn(isbn):
     # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
     header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
     r = requests.get('https://openapi.naver.com/v1/search/book_adv.xml?d_isbn='+str(isbn), headers=header_info)
-    print(r.text)
 
     o = xmltodict.parse(r.text)
     result=json.dumps(o, ensure_ascii=False)
@@ -52,12 +51,10 @@ def find_bookdetail_via_isbn(isbn):
 def give_bookInfo():
 
     data = str(request.data)
-    print(data)
     
     # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
     header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
-
-    r = requests.get('https://openapi.naver.com/v1/search/book.json?query=데이터', headers=header_info)
+    r = requests.get('https://openapi.naver.com/v1/search/book.json?query='+data, headers=header_info)
     result = r.json()
     
     return result
@@ -66,30 +63,41 @@ def give_bookInfo():
 @app.route('/save-review', methods=['POST'])
 def save_review():
 
+    # (이슈!) 현재 카운트 세서 같이 보내기 
     # /save-review URL로 POST 방식으로 들어올 때 전달받은 콘텐츠를 각 변수에 저장
+    
     booktitle = request.form['booktitle_give']
     review_content = request.form['review_content_give']
     imgfile = request.files["imgfile_give"]
-    print("test-log", booktitle, review_content)
+    img_url = request.form["imgurl_give"]
     
-    # 책 이미지 파일을 static 폴더에 저장
-    extension = imgfile.filename.split('.')[-1]
-    today = datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-    filename = f'file-{mytime}'
-    imgfile.save(f'static/books_pic/{filename}.{extension}')
+    print("test", img_url)
     
-    
-    print("test-log", filename, mytime, extension)
-
-    doc = {
+    if imgfile is not None : 
+        
+        # 책 이미지 파일을 static 폴더에 저장
+        extension = imgfile.filename.split('.')[-1]
+        today = datetime.now()
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+        filename = f'file-{mytime}'
+        imgfile.save(f'static/books_pic/{filename}.{extension}')
+        
+        doc = {
         'title':booktitle,
         'content':review_content,
         'file': f'{filename}.{extension}',
         'time': today.strftime('%Y.%m.%d')
-    }
+         }
     
-    print("test-log: doc 생성 완료")
+    else : 
+        
+        doc = {
+        'title':booktitle,
+        'content':review_content,
+        'file': img_url,
+        'time': today.strftime('%Y.%m.%d')
+        }
+
 
     db.review_test.insert_one(doc)
 
