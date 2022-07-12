@@ -113,7 +113,32 @@
         url: "/review_test",
         data: {},
         success: function (response) {
-          console.log(response);
+          let rows = response["books"];
+          console.log(rows);
+
+          for (let i = 0; i < rows.length; i++) {
+            let content = rows[i]["content"];
+            let file = rows[i]["file"];
+            let title = rows[i]["title"];
+            let time = rows[i]["time"];
+
+            let temp_html = `<div class="col">
+                                <a href="/">
+                                  <div class="card">
+                                    <img
+                                      src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                                      class="card-img-top"
+                                      alt="${title}"
+                                    />
+                                    <div class="card-body item">
+                                      <span><h5 class="card-title name">${title}</h5></span>
+                                      <p>${content}</p>
+                                    </div>
+                                  </div>
+                                </a>
+                              </div>`;
+            $("#books_container").append(temp_html);
+          }
         },
       });
     }
@@ -150,7 +175,7 @@
     </body>
     <div class="body container">
       <!-- <p>검색</p> -->
-      <div class="row row-cols-1 row-cols-md-3">
+      <div id="books_container" class="row row-cols-1 row-cols-md-3">
         <div class="col">
           <a href="/">
             <div class="card">
@@ -175,90 +200,6 @@
               />
               <div class="card-body item">
                 <h5 class="card-title name">편한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">싼편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">불친절한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">집앞 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">비싼 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">이상한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">이웃집 편의점</h5>
               </div>
             </div>
           </a>
