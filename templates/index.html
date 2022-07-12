@@ -24,6 +24,11 @@
   <style>
     .topbtn {
       float: right;
+      margin-top: 11px;
+      margin-right: 18px;
+    }
+    .topbtn > button {
+      margin-left: 12px;
     }
 
     .btn-secondary {
@@ -48,6 +53,8 @@
 
     .writebtn {
       float: right;
+      margin-right: 95px;
+      margin-bottom: 10px;
     }
 
     .body > p {
@@ -117,9 +124,8 @@
       for (i = 0; i < item.length; i++) {
         name = item[i].getElementsByClassName("name");
         if (name[0].innerHTML.toUpperCase().indexOf(value) > -1) {
-          item[i].style.display = "flex";
+          item[i].style.display = "";
         } else {
-          // item[i].style.display = "none";
           let colelements = item[i].parentElement.parentElement.parentElement;
           colelements.style.display = "none";
         }
@@ -158,7 +164,7 @@
                                     <div class="card-body item">
                                       <span><h5 class="card-title name">${title}</h5></span>
                                       <hr>
-                                      <p>아이디, 닉네임</p>
+                                      <p>닉네임</p>
                                     </div>
                                   </div>
                                 </a>
@@ -167,6 +173,10 @@
           }
         },
       });
+    }
+
+    function WriteNote() {
+      alert("글남기기");
     }
   </script>
   <body>
@@ -200,12 +210,14 @@
         </div>
       </div>
       <div class="writebtn">
-        <button type="button" class="btn btn-secondary">작성</button>
+        <button type="button" class="btn btn-secondary" onclick="WriteNote()">
+          글 남기기
+        </button>
       </div>
     </body>
     <div class="body container">
       <!-- <p>검색</p> -->
-      <div id="books_container" class="row row-cols-2 row-cols-md-3"></div>
+      <div id="books_container" class="row row-cols-2 row-cols-md-4"></div>
     </div>
     <div class="footer">
       <p>바닥</p>
