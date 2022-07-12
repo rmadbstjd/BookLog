@@ -22,20 +22,32 @@
     <title>BookLog 메인페이지</title>
   </head>
   <style>
-    .header {
-      display: flex;
+    .topbtn {
+      float: right;
     }
+
     .btn-secondary {
-      justify-content: flex-end;
       margin: 3px 3px 3px 6px;
     }
 
     .MainTitle {
       text-align: center;
+      font-size: 60px;
+      padding-top: 60px;
+      margin-bottom: 20px;
     }
 
     .body {
       width: 95%;
+    }
+
+    .searchbox {
+      width: 100%;
+      text-align: center;
+    }
+
+    .writebtn {
+      float: right;
     }
 
     .body > p {
@@ -55,6 +67,14 @@
       margin-right: auto;
     }
 
+    .name {
+      margin-bottom: -5px;
+    }
+
+    .item > p {
+      margin-top: -5px;
+    }
+
     .col > a {
       text-decoration: none;
       color: black;
@@ -62,20 +82,25 @@
 
     .card {
       border-radius: 10px;
+      background-color: whitesmoke;
     }
 
     .card > img {
       width: 252px;
       height: 373px;
-      object-fit: cover;
+      object-position: center;
 
-      display: block;
       margin: auto;
-      margin-top: 15px;
+      margin-top: 20px;
       margin-left: auto;
       margin-right: auto;
 
       border-radius: 10px;
+    }
+
+    #value {
+      width: 500px;
+      font-size: 22px;
     }
   </style>
   <script type="text/javascript">
@@ -132,7 +157,8 @@
                                     />
                                     <div class="card-body item">
                                       <span><h5 class="card-title name">${title}</h5></span>
-                                      <p>${content}</p>
+                                      <hr>
+                                      <p>아이디, 닉네임</p>
                                     </div>
                                   </div>
                                 </a>
@@ -145,8 +171,10 @@
   </script>
   <body>
     <div class="header">
-      <button type="button" class="btn btn-secondary">로그인</button>
-      <button type="button" class="btn btn-secondary">회원가입</button>
+      <div class="topbtn">
+        <button type="button" class="btn btn-secondary">로그인</button>
+        <button type="button" class="btn btn-secondary">회원가입</button>
+      </div>
     </div>
     <h1 class="MainTitle">BookLog</h1>
     <body>
@@ -158,53 +186,26 @@
             id="inputbtn"
             class="btn btn-secondary filterbtn"
           >
-            <i class="fa fa-search" aria-hidden="true"></i>
+            <i class="fa fa-search bodybtn" aria-hidden="true"></i>
             <!-- 찾기버튼 -->
           </button>
           <button
             type="button"
-            onclick="window.location.href='/templates/index.html'"
+            onclick="window.location.reload()"
             class="btn btn-secondary filterbtn"
           >
-            <i class="fa fa-home" aria-hidden="true"></i>
+            <i class="fa fa-home bodybtn" aria-hidden="true"></i>
             <!-- 홈버튼 -->
           </button>
-          <button type="button" class="btn btn-secondary">작성</button>
         </div>
+      </div>
+      <div class="writebtn">
+        <button type="button" class="btn btn-secondary">작성</button>
       </div>
     </body>
     <div class="body container">
       <!-- <p>검색</p> -->
-      <div id="books_container" class="row row-cols-1 row-cols-md-3">
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <span><h5 class="card-title name">불편한 편의점</h5></span>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">편한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
+      <div id="books_container" class="row row-cols-2 row-cols-md-3"></div>
     </div>
     <div class="footer">
       <p>바닥</p>
