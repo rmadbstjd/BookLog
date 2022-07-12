@@ -48,3 +48,16 @@
 
   border-radius: 10px;
 }
+
+.topbtn {
+  float: right;
+  margin-top: 11px;
+  margin-right: 18px;
+}
+.topbtn > button {
+  margin-left: 12px;
+}
+
+.btn-secondary {
+  margin: 3px 3px 3px 6px;
+}

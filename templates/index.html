@@ -31,6 +31,10 @@
       margin-left: 12px;
     }
 
+    .topbtn > a {
+      margin-right: 10px;
+    }
+
     .btn-secondary {
       margin: 3px 3px 3px 6px;
     }
@@ -176,14 +180,27 @@
     }
 
     function WriteNote() {
-      alert("글남기기");
+      window.location.href = "/edit-page";
     }
   </script>
   <body>
     <div class="header">
       <div class="topbtn">
-        <button type="button" class="btn btn-secondary">로그인</button>
-        <button type="button" class="btn btn-secondary">회원가입</button>
+        <a>ㅇㅇㅇ님</a>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.location.href = '/login'"
+        >
+          로그인
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.location.href = '/register'"
+        >
+          회원가입
+        </button>
       </div>
     </div>
     <h1 class="MainTitle">BookLog</h1>

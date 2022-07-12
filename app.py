@@ -1,10 +1,4 @@
 from pymongo import MongoClient
-<<<<<<< HEAD
-
-import certifi
-
-# import requests
-=======
 import jwt
 import datetime
 import hashlib
@@ -16,27 +10,14 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
->>>>>>> 7a060deed4a75b78a9f3c9ea0f390572d29bb7f4
-
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-client = MongoClient('mongodb+srv://rmadbstjd:kys3421@cluster0.xwuyi.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.MINIPROJECT
-
-
-<<<<<<< HEAD
 client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority' , tlsCAFile=certifi.where())
 db = client.spart_week1
-=======
-
-
-#client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
-#db = client.spart_week1
->>>>>>> 7a060deed4a75b78a9f3c9ea0f390572d29bb7f4
 
 
 @app.route('/')
