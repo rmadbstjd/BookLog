@@ -155,11 +155,12 @@
       }
     }
 
-    // document.getElementById("value").addEventListener("keyup", function (e) {
-    //   if (e.keyCode === 13) {
-    //     document.getElementById("inputbtn").click();
-    //   }
-    // });
+
+    function enterkey() {
+      if (window.event.keyCode == 13) {
+        filter()
+      }
+    }
 
     let nickname = {{ nickname }}
 
@@ -228,7 +229,12 @@
     <h1 class="MainTitle">BookLog</h1>
     <div class="searchbox">
       <div class="header">
-        <input type="text" id="value" placeholder="Type to Search" />
+        <input
+          type="text"
+          id="value"
+          onkeyup="enterkey()"
+          placeholder="Type to Search"
+        />
         <button
           onclick="filter()"
           id="inputbtn"
