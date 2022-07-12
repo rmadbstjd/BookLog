@@ -67,7 +67,8 @@ def give_bookInfo():
 @app.route('/save-review', methods=['POST'])
 def save_review():
     
-    # db.review_test.
+    all_reviews = list(db.review_test.find({},{'_id':False}))
+    print(all_reviews[-1]['content_no'])
     
     booktitle = request.form['booktitle_give']
     review_content = request.form['review_content_give']
@@ -77,7 +78,8 @@ def save_review():
         'title': booktitle,
         'content':review_content,
         'file': img_url,
-        'time': datetime.now().strftime('%Y.%m.%d')
+        'time': datetime.now().strftime('%Y.%m.%d'),
+        'content_no': all_reviews[-1]['content_no']+1
         }
 
     db.review_test.insert_one(doc)
