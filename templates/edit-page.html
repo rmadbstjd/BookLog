@@ -24,6 +24,84 @@
     <!-- Local CSS & JS import -->
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
     <script src="{{ url_for("static", filename="script.js") }}"></script>
+
+    <!-- 이 페이지만 : 파일업로더 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script> 
+
+    <!-- 이 페이지 전용 script -->
+    <script>
+      
+      
+      /* $("#button-to-openmodal").click(function(){
+        var data = $('#booknameSearch').val();
+          $("#contents.body-contents").val(data);
+          $("#text-contents.body-contents").html(data);
+      }); */
+
+
+      $(document).ready(function () {
+        bsCustomFileInput.init();
+        //listing();
+      });
+
+      /* function listing() {
+        $.ajax({
+          type: "GET",
+          url: "/diary",
+          data: {},
+          success: function (response) {
+            let diaries = response["all_diary"];
+            for (let i = 0; i < diaries.length; i++) {
+              let title = diaries[i]["title"];
+              let content = diaries[i]["content"];
+              let file = diaries[i]["file"];
+              let time = diaries[i]["time"];
+
+              let temp_html = `<div class="card">
+                                            <img src="../static/${file}" class="card-img-top">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${title}</h5>
+                                                <p class="card-text">${content}</p>
+                                                <p class="save-date">${time}</p>
+                                            </div>
+                                        </div>`;
+              $("#cards-box").append(temp_html);
+            }
+          },
+        });
+      } */
+
+      function posting() {
+
+        // 포스팅할 데이터 취합
+        let booktitle = $("#booktitle").val();
+        let review_content = $("#review_content").val();
+        let imgfile = $("#imgfile")[0].files[0];
+
+        // FormData 객체에 담아, 전송 준비
+        let form_data = new FormData();
+        form_data.append("imgfile_give", imgfile);
+        form_data.append("booktitle_give", booktitle);
+        form_data.append("review_content_give", review_content);
+
+        // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert) 
+        // data에 "form_data" 객체를 담아 전송 
+
+        $.ajax({
+          type: "POST",
+          url: "/save-review",
+          data: form_data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (response) {
+            alert(response["msg"]);
+            window.location.reload();
+          },
+        });
+      }
+
+    </script>
   </head>
 
   <body>
@@ -37,26 +115,35 @@
     </div>
 
     <div class="container mt-5">
+
+      <!-- 네이버 책 API 활용 기능 추가 예정 : https://developers.naver.com/apps/#/register?defaultScope=search -->
       <form class="mb-5">
         <label for="booknameSearch" class="form-label">네이버 도서 검색</label>
         <div class="input-group mb-3">
           <input type="text" class="form-control" id="booknameSearch" placeholder="도서명">
-          <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-bs-toggle="modal" data-bs-target="#exampleModal">도서 검색</button>
+          <button class="btn btn-outline-secondary" type="button" id="button-to-openmodal" data-bs-toggle="modal" data-bs-target="#exampleModal">도서 검색</button>
         </div>
       </form>
-      <!-- 네이버 책 API 활용 예정 : https://developers.naver.com/apps/#/register?defaultScope=search -->
+
+
 
       <form>
+
         <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">책제목</label>
-          <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="책 제목을 적어주세요">
+          <label for="imgfile" class="form-label">사진 선택하기</label>
+          <input type="file" class="form-control" id="imgfile" />
+        </div>
+
+        <div class="mb-3">
+          <label for="booktitle" class="form-label">책제목</label>
+          <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 적어주세요">
         </div>
         <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">책 감상평</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="20"></textarea>
+          <label for="review_content" class="form-label">책 감상평</label>
+          <textarea class="form-control" id="review_content" rows="20"></textarea>
         </div>
         <div class="mb-3 text-center">
-        <button type="submit" class="btn btn-primary">등록</button>
+        <button type="submit" class="btn btn-primary" onclick="posting()">등록</button>
         <button type="button" class="btn btn-secondary">뒤로 가기</button>
         </div>
       </form>
@@ -82,7 +169,6 @@
         </div>
       </div>
 
-      
     </div>
 
   </body>

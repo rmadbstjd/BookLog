@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
+from datetime import datetime
+
 # import requests
 
 app = Flask(__name__)
@@ -22,6 +24,38 @@ def detail():
 def edit_page():
     return render_template("edit-page.html")
 
+@app.route('/save-review', methods=['POST'])
+def save_review():
+
+    # /save-review URL로 POST 방식으로 들어올 때 전달받은 콘텐츠를 각 변수에 저장
+    booktitle = request.form['booktitle_give']
+    review_content = request.form['review_content_give']
+    imgfile = request.files["imgfile_give"]
+    print("test-log", booktitle, review_content)
+    
+    # 책 이미지 파일을 static 폴더에 저장
+    extension = imgfile.filename.split('.')[-1]
+    today = datetime.now()
+    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+    filename = f'file-{mytime}'
+    imgfile.save(f'static/{filename}.{extension}')
+    
+    print("test-log", filename, mytime, extension)
+
+    doc = {
+        'title':booktitle,
+        'content':review_content,
+        'file': f'{filename}.{extension}',
+        'time': today.strftime('%Y.%m.%d')
+    }
+    
+    print("test-log: doc 생성 완료")
+
+    db.review_test.insert_one(doc)
+
+    return jsonify({'msg': '책 리뷰 저장 완료!'})
+
+
 # 로그인페이지 @금윤성
 @app.route('/login')
 def login():
@@ -34,7 +68,7 @@ def register():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=5040, debug=True)
 
 # @app.route('/detail/<keyword>')
 # def detail(keyword):
