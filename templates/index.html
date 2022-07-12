@@ -79,6 +79,10 @@
     }
   </style>
   <script type="text/javascript">
+    $(document).ready(function () {
+      listing();
+    });
+
     function filter() {
       var value, name, item, i;
 
@@ -102,6 +106,17 @@
     //     document.getElementById("inputbtn").click();
     //   }
     // });
+
+    function listing() {
+      $.ajax({
+        type: "GET",
+        url: "/review_test",
+        data: {},
+        success: function (response) {
+          console.log(response);
+        },
+      });
+    }
   </script>
   <body>
     <div class="header">

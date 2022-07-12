@@ -1,16 +1,26 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from pymongo import MongoClient
+
+import certifi
+
 # import requests
 
 app = Flask(__name__)
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority' , tlsCAFile=certifi.where())
 db = client.spart_week1
 
-# 메인페이지 @문동환
+
 @app.route('/')
-def main():
-    return render_template("index.html")
+def home():
+    return render_template('./index.html')
+
+
+# 메인페이지 @문동환
+@app.route("/review_test", methods=["GET"])
+def main_get():
+    book_list = list(db.review_test.find({},{'_id':False}))
+    return jsonify({'books':book_list})
 
 # 상세페이지 @최효선
 @app.route('/detail')
