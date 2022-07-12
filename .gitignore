@@ -5,3 +5,7 @@
 
 ## 폴더 무시
 venv/
+
+#.iml 파일과 idea dir하위 내용 무시
+*.iml
+.idea/
