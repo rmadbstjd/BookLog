@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+from jinja2 import Undefined
 from pymongo import MongoClient
 from datetime import datetime
 import requests
 import json
 import xmltodict, json
+import urllib
 
 app = Flask(__name__)
 
@@ -24,6 +26,7 @@ def detail():
 # 작성페이지 @김보현
 @app.route('/edit-page')
 def edit_page():
+    
     return render_template("edit-page.html")
 
 # (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
@@ -45,16 +48,17 @@ def find_bookdetail_via_isbn(isbn):
     # data_to_send = {'title': title, 'image_url': image_url, "author":author, "description":description }
     
     return render_template("edit-page.html", title=title, image=image_url, author = author, description = description)
-
-# (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
+    
+# naverapi에서 검색어 정보를 불러오는 코드
 @app.route('/api/call-bookinfo', methods=['POST'])
 def give_bookInfo():
 
-    data = str(request.data)
+    data = urllib.parse.unquote(request.data)
+    print(data)
     
     # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
     header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
-    r = requests.get('https://openapi.naver.com/v1/search/book.json?query='+data, headers=header_info)
+    r = requests.get('https://openapi.naver.com/v1/search/book.json?'+data, headers=header_info)
     result = r.json()
     
     return result
@@ -62,45 +66,22 @@ def give_bookInfo():
 # 작성된 리뷰를 저장
 @app.route('/save-review', methods=['POST'])
 def save_review():
-
-    # (이슈!) 현재 카운트 세서 같이 보내기 
-    # /save-review URL로 POST 방식으로 들어올 때 전달받은 콘텐츠를 각 변수에 저장
+    
+    # db.review_test.
     
     booktitle = request.form['booktitle_give']
     review_content = request.form['review_content_give']
-    imgfile = request.files["imgfile_give"]
-    img_url = request.form["imgurl_give"]
+    img_url = request.form['imgfile_give']
     
-    print("test", img_url)
-    
-    if imgfile is not None : 
-        
-        # 책 이미지 파일을 static 폴더에 저장
-        extension = imgfile.filename.split('.')[-1]
-        today = datetime.now()
-        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-        filename = f'file-{mytime}'
-        imgfile.save(f'static/books_pic/{filename}.{extension}')
-        
-        doc = {
-        'title':booktitle,
-        'content':review_content,
-        'file': f'{filename}.{extension}',
-        'time': today.strftime('%Y.%m.%d')
-         }
-    
-    else : 
-        
-        doc = {
-        'title':booktitle,
+    doc = {
+        'title': booktitle,
         'content':review_content,
         'file': img_url,
-        'time': today.strftime('%Y.%m.%d')
+        'time': datetime.now().strftime('%Y.%m.%d')
         }
 
-
     db.review_test.insert_one(doc)
-
+    
     return jsonify({'msg': '책 리뷰 저장 완료!'})
 
 
@@ -113,7 +94,6 @@ def login():
 @app.route('/register')
 def register():
     return render_template("register.html")
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

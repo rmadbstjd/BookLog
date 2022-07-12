@@ -26,7 +26,7 @@
     <script src="{{ url_for("static", filename="script.js") }}"></script>
 
     <!-- 이 페이지만 : 파일업로더 라이브러리 -->
-    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
 
     <!-- 이 페이지 전용 script -->
     <script>
@@ -45,15 +45,15 @@
 
       function booksearch_listing() {
 
-        /* 관련 책자 찾아서 데이터로 받아 보기 */ 
         var data = $('#booknameSearch').val();
 
         $.ajax({
           type: "POST",
           url: "/api/call-bookinfo",
-          data: { title : data },
-          contentType: 'application/json; charset=UTF-8',
+          data: { query : data },
+          contentType: 'text/plain; charset=UTF-8',
           success: function (response) {
+            console.log(response)
             $("#selectData_table").empty();
             for (let i = 0; i < response.items.length; i++) {
               let title = response.items[i]["title"];
@@ -79,27 +79,19 @@
 
       } 
 
-
-      function posting(img_url) {
-
-        let form_data = new FormData();
-        setTimeout(function(){},5000)
-
+      function posting() {
+        
         // 포스팅할 데이터 취합
-
-        let booktitle = $("#booktitle").val();
+        let booktitle = $("#booktitle").val()
         let review_content = $("#review_content").val();
-
-        if ($("#imgfile")[0].files[0] == undefined) {
-          let imgfile = $("#imgfile")[0].files[0];
-          form_data.append("imgfile_give", imgfile);
-
-        }
+        let img_url = $("#image_url")[0]['src'].split('?')[0];
 
         // FormData 객체에 담아, 전송 준비
+        let form_data = new FormData();
+
+        form_data.append("imgfile_give", img_url);
         form_data.append("booktitle_give", booktitle);
         form_data.append("review_content_give", review_content);
-        form_data.append("imgurl_give", img_url);
 
         // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert) 
         // data에 "form_data" 객체를 담아 전송 
@@ -116,6 +108,8 @@
             window.location.reload();
           },
         });
+      
+        
       }
 
     </script>
@@ -147,26 +141,22 @@
         <div class="mb-3">
 
           {% if image %}
-          <img id="image_url" src="{{image}}" class="img-fluid" alt="">
+          <img id="image_url" src="{{image}}" class="img-fluid" alt="" >
           <span>표지이미지</span>
-          {% else %} 
-          <label for="imgfile" class="form-label">사진 선택하기</label>
-          <input type="file" class="form-control" id="imgfile" />
           {%endif%}
           
         </div>
-        
 
         <div class="mb-3">
           <label for="booktitle" class="form-label">책 제목</label>
-          <input type="text" class="form-control" id="booktitle" placeholder="{% if title %} {{title}} {% else %} 책제목 {%endif%}">
+          <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 입력해주세요." value="{% if title %} {{title}} {% else %} 책제목 {%endif%}" required>
         </div>
         <div class="mb-3">
-          <label for="review_content" class="form-label">책 감상평</label>
-          <textarea class="form-control" id="review_content" rows="20"></textarea>
+          <label for="review_content" class="form-label" >책 감상평</label>
+          <textarea class="form-control" id="review_content" rows="20" required></textarea>
         </div>
         <div class="mb-3 text-center">
-        <button type="submit" class="btn btn-primary" onclick="posting(${image_large});">등록</button>
+        <button type="submit" class="btn btn-primary" onclick="posting();">등록</button>
         <button type="button" class="btn btn-secondary">뒤로 가기</button>
         </div>
       </form>
@@ -193,13 +183,10 @@
                 <tbody id="selectData_table">
                 </tbody>
               </table>
-
-              
               
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-              <button type="button" class="btn btn-primary">검색결과 선택</button>
             </div>
           </div>
         </div>
@@ -207,15 +194,7 @@
 
     </div>
 
-    <script>
-      
-      var title = '{{ title }}';
-      var image = '{{ image }}';
-      var image_large = '{{ image }}'.split('?')[0];
-      var author = '{{ author }}';
-      var description = '{{ description }}';
-    
-    </script>
+
 
   </body>
 
