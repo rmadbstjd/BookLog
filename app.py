@@ -15,7 +15,6 @@ db = client.spart_week1
 def home():
     return render_template('./index.html')
 
-
 # 메인페이지 @문동환
 @app.route("/review_test", methods=["GET"])
 def main_get():
