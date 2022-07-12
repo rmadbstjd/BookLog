@@ -22,7 +22,7 @@ db = client.spart_week1
 
 @app.route('/')
 def home():
-    nickname = '둘리'
+    nickname = 'duli'
     # word_receive = request.args.get('word_give')
     return render_template('./index.html', nickname=nickname)
 

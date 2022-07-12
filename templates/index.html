@@ -155,12 +155,12 @@
       }
     }
 
-
     function enterkey() {
       if (window.event.keyCode == 13) {
-        filter()
+        filter();
       }
     }
+
 
     let nickname = {{ nickname }}
 
@@ -171,15 +171,17 @@
         data: {},
         success: function (response) {
           let rows = response["books"];
+          console.log(rows)
           for (let i = 0; i < rows.length; i++) {
             let content = rows[i]["content"];
             let file = rows[i]["file"];
             let title = rows[i]["title"];
             let time = rows[i]["time"];
+            let number = rows[i]['content_no']
             let nickname = "nickname";
 
             let temp_html = `<div class="col">
-                                <a href="/">
+                                <a href="/detail/${number}">
                                   <div class="card">
                                     <img
                                       src="../static/books_pic/${file}"
@@ -251,12 +253,10 @@
           <i class="fa fa-home bodybtn" aria-hidden="true"></i>
           <!-- 홈버튼 -->
         </button>
+        <button type="button" class="btn btn-secondary" onclick="WriteNote()">
+          글작성
+        </button>
       </div>
-    </div>
-    <div class="writebtn">
-      <button type="button" class="btn btn-secondary" onclick="WriteNote()">
-        글 남기기
-      </button>
     </div>
     <div class="body container">
       <!-- <p>검색</p> -->
