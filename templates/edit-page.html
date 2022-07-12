@@ -43,8 +43,6 @@
         //listing();
       });
 
-      /* 모달을 열자 */
-
       function booksearch_listing() {
 
         /* 관련 책자 찾아서 데이터로 받아 보기 */ 
@@ -63,7 +61,7 @@
             for (let i = 0; i < response.items.length; i++) {
               let title = response.items[i]["title"];
               let author = response.items[i]["author"];
-              let isbn = response.items[i]["isbn"];
+              let isbn = response.items[i]["isbn"]
               console.log(isbn)
               let image_url = response.items[i]["image"];
 
@@ -72,7 +70,7 @@
                                   <td>${title}</td>
                                   <td>${author}</td>
                                   <td><a  type="button" class="btn btn-primary"
-                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="/api/${isbn}" >
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="/edit-page/${isbn}" >
                               선택
                             </a></td>
                                 </tr>`;
@@ -124,12 +122,12 @@
       <button type="button" class="btn btn-secondary">로그인</button>
       <button type="button" class="btn btn-secondary">회원가입</button>
     </div>
-
+  
     <div class="container-fluid mb-5 ">
       <h1 class="MainTitle mb-5 ">BookLog 작성</h1>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-5"> 
 
       <!-- 네이버 책 API 활용 기능 추가 예정 : https://developers.naver.com/apps/#/register?defaultScope=search -->
       <form class="mb-5">
@@ -143,13 +141,20 @@
 
       <form>
         <div class="mb-3">
+
+          {% if image %}
+          <img src="{{image}}" class="img-fluid" alt="">
+          {% else %} 
           <label for="imgfile" class="form-label">사진 선택하기</label>
           <input type="file" class="form-control" id="imgfile" />
+          {%endif%}
+          
         </div>
+        
 
         <div class="mb-3">
-          <label for="booktitle" class="form-label">책제목</label>
-          <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 적어주세요">
+          <label for="booktitle" class="form-label">책 제목</label>
+          <input type="text" class="form-control" id="booktitle" placeholder="{% if title %} {{title}} / {{author}} {% else %} 책제목 {%endif%}">
         </div>
         <div class="mb-3">
           <label for="review_content" class="form-label">책 감상평</label>
@@ -183,6 +188,8 @@
                 <tbody id="selectData_table">
                 </tbody>
               </table>
+
+              
               
             </div>
             <div class="modal-footer">
@@ -194,6 +201,15 @@
       </div>
 
     </div>
+
+    <script>
+      
+      var title = '{{ title }}';
+      var image = '{{ image }}';
+      var author = '{{ author }}';
+      var description = '{{ description }}';
+    
+    </script>
 
   </body>
 

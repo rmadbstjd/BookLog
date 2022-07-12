@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from datetime import datetime
 import requests
 import json
-
+import xmltodict, json
 
 app = Flask(__name__)
 
@@ -27,17 +27,25 @@ def edit_page():
     return render_template("edit-page.html")
 
 # (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
-@app.route('/api/<isbn>')
+@app.route('/edit-page/<isbn>')
 def find_bookdetail_via_isbn(isbn):
     
     # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
-    print(isbn.split()[-1])
     header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
-    r = requests.get('https://openapi.naver.com/v1/search/book_adv.xml?d_isbn='+str(isbn.split()[-1]), headers=header_info)
-    result = r.json()
-    print(result)
+    r = requests.get('https://openapi.naver.com/v1/search/book_adv.xml?d_isbn='+str(isbn), headers=header_info)
+    print(r.text)
+
+    o = xmltodict.parse(r.text)
+    result=json.dumps(o, ensure_ascii=False)
+    data = json.loads(result)
     
-    return render_template("edit-page.html", isbn=result)
+    title = data['rss']['channel']['item']['title']
+    image_url = data['rss']['channel']['item']['image']
+    author = data['rss']['channel']['item']['author']
+    description = data['rss']['channel']['item']['description']
+    # data_to_send = {'title': title, 'image_url': image_url, "author":author, "description":description }
+    
+    return render_template("edit-page.html", title=title, image=image_url, author = author, description = description)
 
 # (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
 @app.route('/api/call-bookinfo', methods=['POST'])
@@ -70,6 +78,7 @@ def save_review():
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
     filename = f'file-{mytime}'
     imgfile.save(f'static/books_pic/{filename}.{extension}')
+    
     
     print("test-log", filename, mytime, extension)
 
