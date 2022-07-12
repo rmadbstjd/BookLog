@@ -12,6 +12,12 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+    <!-- Font Awesome CSS -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+
     <!-- JQuery를 import 합니다 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -24,9 +30,16 @@
   <style>
     .topbtn {
       float: right;
-      margin-top: 11px;
-      margin-right: 18px;
+      width: 400px;
+      text-align: right;
+      margin-top: 30px;
+      margin-right: 25px;
     }
+
+    .btn-secondary {
+      background-color: #8f4700;
+    }
+
     .topbtn > button {
       margin-left: 12px;
     }
@@ -35,15 +48,17 @@
       margin-right: 10px;
     }
 
-    .btn-secondary {
-      margin: 3px 3px 3px 6px;
-    }
-
     .MainTitle {
+      color: #8f4700;
       text-align: center;
-      font-size: 60px;
       padding-top: 60px;
+      margin-top: -14px;
       margin-bottom: 20px;
+      margin-left: 430px;
+
+      font-weight: 800;
+      font-size: 5rem;
+      font-family: "Dongle", sans-serif;
     }
 
     .body {
@@ -57,7 +72,7 @@
 
     .writebtn {
       float: right;
-      margin-right: 95px;
+      margin-right: 40px;
       margin-bottom: 10px;
     }
 
@@ -109,6 +124,10 @@
       border-radius: 10px;
     }
 
+    body {
+      background-color: RGBA(0, 133, 101, 0.2);
+    }
+
     #value {
       width: 500px;
       font-size: 22px;
@@ -143,6 +162,7 @@
     // });
 
     let nickname = {{ nickname }}
+
     function listing() {
       $.ajax({
         type: "GET",
@@ -206,32 +226,32 @@
       </div>
     </div>
     <h1 class="MainTitle">BookLog</h1>
-      <div class="searchbox">
-        <div class="header">
-          <input type="text" id="value" placeholder="Type to Search" />
-          <button
-            onclick="filter()"
-            id="inputbtn"
-            class="btn btn-secondary filterbtn"
-          >
-            <i class="fa fa-search bodybtn" aria-hidden="true"></i>
-            <!-- 찾기버튼 -->
-          </button>
-          <button
-            type="button"
-            onclick="window.location.reload()"
-            class="btn btn-secondary filterbtn"
-          >
-            <i class="fa fa-home bodybtn" aria-hidden="true"></i>
-            <!-- 홈버튼 -->
-          </button>
-        </div>
-      </div>
-      <div class="writebtn">
-        <button type="button" class="btn btn-secondary" onclick="WriteNote()">
-          글 남기기
+    <div class="searchbox">
+      <div class="header">
+        <input type="text" id="value" placeholder="Type to Search" />
+        <button
+          onclick="filter()"
+          id="inputbtn"
+          class="btn btn-secondary filterbtn"
+        >
+          <i class="fa fa-search bodybtn" aria-hidden="true"></i>
+          <!-- 찾기버튼 -->
+        </button>
+        <button
+          type="button"
+          onclick="window.location.reload()"
+          class="btn btn-secondary filterbtn"
+        >
+          <i class="fa fa-home bodybtn" aria-hidden="true"></i>
+          <!-- 홈버튼 -->
         </button>
       </div>
+    </div>
+    <div class="writebtn">
+      <button type="button" class="btn btn-secondary" onclick="WriteNote()">
+        글 남기기
+      </button>
+    </div>
     <div class="body container">
       <!-- <p>검색</p> -->
       <div id="books_container" class="row row-cols-2 row-cols-md-4"></div>
