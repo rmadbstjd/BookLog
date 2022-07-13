@@ -155,14 +155,29 @@
       }
     }
 
+    function Searching() {
+      let value = document.getElementById("value").value.toUpperCase();
+      let item = document.getElementsByClassName("name");
+      $.ajax({
+        type: "GET",
+        url: "/search",
+        data: {},
+        success: function (response) {
+          let rows = response["books"];
+          for (let i = 0; i < rows.length; i++) {
+            let name = item[i].innerText;
+            let resulut = name.includes(value);
+            console.log(resulut);
+          }
+        },
+      });
+    }
+
     function enterkey() {
       if (window.event.keyCode == 13) {
         filter();
       }
     }
-
-
-    let nickname = {{ nickname }}
 
     function listing() {
       $.ajax({
@@ -171,20 +186,21 @@
         data: {},
         success: function (response) {
           let rows = response["books"];
-          console.log(rows)
+          // console.log(rows)
           for (let i = 0; i < rows.length; i++) {
             let content = rows[i]["content"];
             let file = rows[i]["file"];
             let title = rows[i]["title"];
             let time = rows[i]["time"];
-            let number = rows[i]['content_no']
+            let number = rows[i]["content_no"];
+
             let nickname = "nickname";
 
             let temp_html = `<div class="col">
-                                <a href="/detail/${number}">
+                                <a href="/detail/${number}" onclick="passdata()">
                                   <div class="card">
                                     <img
-                                      src="../static/books_pic/${file}"
+                                      src="${file}"
                                       class="card-img-top"
                                       alt="${title}"
                                     />
@@ -201,16 +217,11 @@
         },
       });
     }
-
     // .encode('ascii', 'ignore').decode(utf-8)
-
-    function WriteNote() {
-      window.location.href = "/edit-page";
-    }
   </script>
   <body>
     <div class="header">
-      <div class="topbtn">
+      <div class="topbtn" id="navbar">
         <a>{{ nickname }}님</a>
         <button
           type="button"
@@ -253,7 +264,11 @@
           <i class="fa fa-home bodybtn" aria-hidden="true"></i>
           <!-- 홈버튼 -->
         </button>
-        <button type="button" class="btn btn-secondary" onclick="WriteNote()">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.location.href = '/edit-page'"
+        >
           글작성
         </button>
       </div>
@@ -262,8 +277,6 @@
       <!-- <p>검색</p> -->
       <div id="books_container" class="row row-cols-2 row-cols-md-4"></div>
     </div>
-    <div class="footer">
-      <p>바닥</p>
-    </div>
+    <div class="footer"></div>
   </body>
 </html>
