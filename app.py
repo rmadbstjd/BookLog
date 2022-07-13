@@ -27,7 +27,7 @@ def detail():
 @app.route('/edit-page')
 def edit_page():
     
-    return render_template("edit-page.html")
+    return render_template("edit-page.html", nickname="둘리")
 
 # (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
 @app.route('/edit-page/<isbn>')

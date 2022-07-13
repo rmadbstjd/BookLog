@@ -31,15 +31,36 @@
     <!-- 이 페이지 전용 script -->
     <script>
       
-      
       /* $("#button-to-openmodal").click(function(){
         var data = $('#booknameSearch').val();
           $("#contents.body-contents").val(data);
           $("#text-contents.body-contents").html(data);
       }); */
-
+      function render_nav(nickname) {
+        let nav_html = `<div class="topbtn mb-5">
+            <a>${nickname}님</a>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="window.location.href = '/login'"
+            >
+              로그인
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              onclick="window.location.href = '/register'"
+            >
+              회원가입
+            </button>
+          </div>`;
+      
+        $("#nav").append(nav_html);
+      }
+      
       $(document).ready(function () {
         bsCustomFileInput.init();
+        render_nav('{{nickname}}')
         //listing();
       });
 
@@ -65,8 +86,8 @@
                                   <th scope="row"><img src="${image_url}"></img></th>
                                   <td>${title}</td>
                                   <td>${author}</td>
-                                  <td><a  type="button" class="btn btn-primary"
-                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" href="/edit-page/${isbn}" >
+                                  <td colspan="2"><a  type="button" class="btn btn-secondary btn-sm"
+                                    style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .25rem;" href="/edit-page/${isbn}" >
                               선택
                             </a></td>
                                 </tr>`;
@@ -115,9 +136,7 @@
   </head>
 
   <body>
-    <div class="header mb-5 ">
-      <button type="button" class="btn btn-secondary">로그인</button>
-      <button type="button" class="btn btn-secondary">회원가입</button>
+    <div class="header mb-5 " id="nav">
     </div>
   
     <div class="container-fluid mb-5 ">
@@ -170,13 +189,13 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <table class="table">
+              <table class="table table-responsive">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">제목</th>
                     <th scope="col">저자</th>
-                    <th scope="col">선택</th>
+                    <th scope="col" colspan="2">선택</th>
                   </tr>
                 </thead>
                 <tbody id="selectData_table">
