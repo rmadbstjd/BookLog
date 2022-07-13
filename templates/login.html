@@ -62,7 +62,7 @@
             //     alert("{{ msg }}")
             // {% endif %}
             function sign_in() {
-                console.log('test')
+
                 let username = $("#input-username").val()
                 let password = $("#input-password").val()
 
@@ -91,16 +91,38 @@
                         username_give: username,
                         password_give: password
                     },
-                    success: function (response) {
+                    success: function (response,id) {
                         if (response['result'] == 'success') {
                             $.cookie('mytoken', response['token'], {path: '/'});
-                            window.location.replace("/")
+                            login_check(response)
+
+                            /*window.location.replace("/")*/
+
+
                         } else {
                             alert(response['msg']);
                         }
                     }
                 });
             }
+            function login_check(response) {
+                let check = response['result']
+                let check_id = response['id']
+
+                 $.ajax({
+                    type: "POST",
+                    url: "/login/login_check",
+                    data: {
+                        check_done_give : check,
+                        check_id_give : check_id
+                    },
+                    success: function (nickname) {
+                        console.log(nickname)
+                    }
+                });
+            }
+
+
             function is_password(asValue) {
                 let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
                 return regExp.test(asValue);
