@@ -225,17 +225,15 @@ def check_dup():
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-    # if result is not None:
-    #     payload = {
-    #         'id': username_receive,
-    #         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
-    #     }
-    #     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+# 로그인 정보 받기 @금윤성
+@app.route('/index/addnick', methods=['POST'])
+def add_nick():
 
-    #     return jsonify({'result': 'success', 'token': token})
-    # # 찾지 못하면
-    # else:
-    #     return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    nickname = payload['nickname']
+
+    return jsonify({'nick' : nickname})
 
 
 if __name__ == '__main__':
