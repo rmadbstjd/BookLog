@@ -68,6 +68,7 @@ def edit_review(reviewNo):
     
     return render_template("edit-page.html", title=title, content=content, image=image_url, review_no=reviewNo, isEdit=title)
 
+
 # 네이버를 통해 검색된 책자의 리뷰를 작성
 @app.route('/edit-page/<isbn>')
 def find_bookdetail_via_isbn(isbn):
@@ -161,15 +162,14 @@ def give_bookInfo():
 def login():
     return render_template("login.html")
 
+# 로그인  @금윤성
 @app.route('/login/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
-    print('test')
+
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
-    
     if result is not None:
         payload = {
             'id': username_receive,
@@ -177,16 +177,31 @@ def sign_in():
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-        return jsonify({'result': 'success', 'token': token})
+        return jsonify({'result': 'success', 'token': token, 'id' : payload["id"]})
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+# 로그인 체크, 닉네임 반환 @금윤성
+@app.route('/login/login_check', methods=['POST'])
+def login_check():
+    check_done_receive = request.form['check_done_give']
+    check_id_receive = request.form['check_id_give']
+    user = db.users.find_one({'username': check_id_receive})
+    
+    if  check_done_receive == 'success':
+
+        return jsonify({'nickname' : user['nickname']})
+
+
+
 
 # 회원가입 페이지 @금윤성
 @app.route('/register')
 def register():
     return render_template("register.html")
 
+# 회원가입 명령 @금윤성
 @app.route('/register/sign_up', methods=['POST'])
 def sign_up():
     username_receive = request.form['username_give']
@@ -205,25 +220,25 @@ def sign_up():
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
+# 기존에 있는 아이디인지 확인 @금윤성
 @app.route('/register/check_dup', methods=['POST'])
 def check_dup():
-    print('test')
+
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
-    if result is not None:
-        payload = {
-            'id': username_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
-        }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    # if result is not None:
+    #     payload = {
+    #         'id': username_receive,
+    #         'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+    #     }
+    #     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-        return jsonify({'result': 'success', 'token': token})
-    # 찾지 못하면
-    else:
-        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-
+    #     return jsonify({'result': 'success', 'token': token})
+    # # 찾지 못하면
+    # else:
+    #     return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
 if __name__ == '__main__':
