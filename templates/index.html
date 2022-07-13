@@ -113,7 +113,10 @@
       $(document).ready(function () {
         listing();
         hidebtn();
+        addnick()
       });
+
+      let id_value = document.cookie.slice(8);
 
       function filter() {
         var value, name, item, i;
@@ -132,24 +135,6 @@
         }
       }
 
-      function Searching() {
-        let value = document.getElementById("value").value.toUpperCase();
-        let item = document.getElementsByClassName("name");
-        $.ajax({
-          type: "GET",
-          url: "/search",
-          data: {},
-          success: function (response) {
-            let rows = response["books"];
-            for (let i = 0; i < rows.length; i++) {
-              let name = item[i].innerText;
-              let resulut = name.includes(value);
-              console.log(resulut);
-            }
-          },
-        });
-      }
-
       function enterkey() {
         if (window.event.keyCode == 13) {
           filter();
@@ -159,9 +144,24 @@
       function hidebtn() {
         if (document.cookie != "") {
           $("#navbar").toggleClass("is-hidden");
-          console.log(document.cookie);
+          console.log(document.cookie)
+
         }
       }
+
+    function addnick() {
+      $.ajax({
+        type: "POST",
+        url: "/index/addnick",
+        data: {
+        },
+      success: function(nick) {
+          temp=`<a id="nicknamebar">${nick["nick"]}님</a>`
+          $("#navbar").append(temp)
+        },
+      });
+    }
+
 
       function listing() {
         $.ajax({
@@ -177,8 +177,8 @@
               let title = rows[i]["title"];
               let time = rows[i]["time"];
               let number = rows[i]["content_no"];
-
-              let nickname = "nickname";
+              let nickname = rows[i]["writer_nickname"];
+              let star = rows[i]["star_score"];
 
               let temp_html = `<div class="col">
                                   <a href="/detail/${number}" onclick="passdata()">
@@ -190,6 +190,7 @@
                                       />
                                       <div class="card-body item">
                                         <span><h5 class="card-title name">${title}</h5></span>
+                                        <p>${star}</p>
                                         <hr>
                                         <p>${nickname}</p>
                                       </div>
@@ -203,10 +204,8 @@
       }
     </script>
   </head>
-
   <body>
     <div class="header">
-      <a>{{ nickname }}님</a>
       <div class="topbtn" id="navbar">
         <button
           type="button"

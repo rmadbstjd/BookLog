@@ -39,6 +39,14 @@ def main_get():
     book_list = list(review_db.review_test.find({},{'_id':False}))
     return jsonify({'books':book_list})
 
+@app.route("/passid", methods=["POST"])
+def get_nickname():
+    id_value_receive = request.form['id_value_give']
+    user_nickname = list(db.users.find({'username': id_value_receive},{'_id':False}))
+    nickname = user_nickname[0]['nickname']
+    print(nickname)
+    return render_template("index.html", nickname=nickname)
+
 # 상세페이지 @최효선
 @app.route('/detail')
 def detail():
@@ -152,7 +160,6 @@ def give_bookInfo():
     header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
     r = requests.get('https://openapi.naver.com/v1/search/book.json?'+data, headers=header_info)
     result = r.json()
-    
     return result
 
 
@@ -168,11 +175,14 @@ def sign_in():
 
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
+    user_nickname = db.users.find_one({'username': username_receive})
+    nick = user_nickname['nickname']
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
     if result is not None:
         payload = {
             'id': username_receive,
+            'nickname': nick,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -192,7 +202,13 @@ def login_check():
         return jsonify({'nickname' : user['nickname']})
 
 
+@app.route('/index/addnick', methods=['POST'])
+def add_nick():
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    nickname = payload['nickname']
 
+    return jsonify({'nick' : nickname})
 
 # 회원가입 페이지 @금윤성
 @app.route('/register')
