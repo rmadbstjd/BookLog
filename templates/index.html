@@ -69,6 +69,10 @@
         margin-right: auto;
       }
 
+      .nickstar {
+        margin-top: 12px;
+      }
+
       .name {
         margin-bottom: -5px;
       }
@@ -176,10 +180,10 @@
                                       />
                                       <div class="card-body item">
                                         <span><h5 class="card-title name">${title}</h5></span>
-                                        <hr>
-                                        <p>${star_img}</p>
-                                        <p>${star}</p>
-                                        <p>${nickname}</p>
+                                        <div class="nickstar">
+                                          <p>${nickname}</p>
+                                          <p>${star_img}</p>
+                                        </div>
                                       </div>
                                     </div>
                                   </a>
@@ -211,33 +215,33 @@
       </div>
     </div>
     <h1 class="MainTitle">BookLog</h1>
-    <div class="searchbox">
-      <div class="header">
+    <div class="header">
+      <div class="input-group searchbox">
         <input
           type="text"
           id="value"
-          onkeyup="enterkey()"
+          class="form-control"
           placeholder="Type to Search"
+          aria-label="Recipient's username with two button addons"
+          onkeyup="enterkey()"
         />
         <button
+          class="btn btn-outline-secondary filterbtn"
+          type="button"
           onclick="filter()"
-          id="inputbtn"
-          class="btn btn-secondary filterbtn"
         >
           <i class="fa fa-search bodybtn" aria-hidden="true"></i>
-          <!-- 찾기버튼 -->
         </button>
         <button
+          class="btn btn-outline-secondary"
           type="button"
           onclick="window.location.reload()"
-          class="btn btn-secondary filterbtn"
         >
           <i class="fa fa-home bodybtn" aria-hidden="true"></i>
-          <!-- 홈버튼 -->
         </button>
         <button
+          class="btn btn-outline-secondary"
           type="button"
-          class="btn btn-secondary"
           onclick="window.location.href = '/edit-page'"
         >
           글작성
