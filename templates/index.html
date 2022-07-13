@@ -12,6 +12,12 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+    <!-- Font Awesome CSS -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+
     <!-- JQuery를 import 합니다 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -20,238 +26,259 @@
       crossorigin="anonymous"
     ></script>
     <title>BookLog 메인페이지</title>
-  </head>
-  <style>
-    .header {
-      display: flex;
-    }
-    .btn-secondary {
-      justify-content: flex-end;
-      margin: 3px 3px 3px 6px;
-    }
 
-    .MainTitle {
-      text-align: center;
-    }
+    <style>
+      .topbtn {
+        float: right;
+        width: 400px;
+        text-align: right;
+        margin-top: 30px;
+        margin-right: 25px;
+      }
 
-    .body {
-      width: 95%;
-    }
+      .btn-secondary {
+        background-color: #8f4700;
+      }
 
-    .body > p {
-      text-align: center;
-    }
+      .topbtn > button {
+        margin-left: 12px;
+      }
 
-    .row {
-      margin-top: 50px;
-      width: 100%;
-    }
+      .topbtn > a {
+        margin-right: 10px;
+      }
 
-    .card {
-      width: 300px;
-      height: 520px;
-      margin-bottom: 40px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+      .MainTitle {
+        color: #8f4700;
+        text-align: center;
+        padding-top: 60px;
+        margin-top: -14px;
+        margin-bottom: 20px;
+        margin-left: 430px;
 
-    .col > a {
-      text-decoration: none;
-      color: black;
-    }
+        font-weight: 800;
+        font-size: 5rem;
+        font-family: "Dongle", sans-serif;
+      }
 
-    .card {
-      border-radius: 10px;
-    }
+      .body {
+        width: 95%;
+      }
 
-    .card > img {
-      width: 252px;
-      height: 373px;
-      object-fit: cover;
+      .searchbox {
+        width: 100%;
+        text-align: center;
+      }
 
-      display: block;
-      margin: auto;
-      margin-top: 15px;
-      margin-left: auto;
-      margin-right: auto;
+      .writebtn {
+        float: right;
+        margin-right: 40px;
+        margin-bottom: 10px;
+      }
 
-      border-radius: 10px;
-    }
-  </style>
-  <script type="text/javascript">
-    function filter() {
-      var value, name, item, i;
+      .body > p {
+        text-align: center;
+      }
 
-      value = document.getElementById("value").value.toUpperCase();
-      item = document.getElementsByClassName("item");
+      .row {
+        margin-top: 50px;
+        width: 100%;
+      }
 
-      for (i = 0; i < item.length; i++) {
-        name = item[i].getElementsByClassName("name");
-        if (name[0].innerHTML.toUpperCase().indexOf(value) > -1) {
-          item[i].style.display = "flex";
-        } else {
-          // item[i].style.display = "none";
-          let colelements = item[i].parentElement.parentElement.parentElement;
-          colelements.style.display = "none";
+      .card {
+        width: 300px;
+        height: 520px;
+        margin-bottom: 40px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .name {
+        margin-bottom: -5px;
+      }
+
+      .item > p {
+        margin-top: -5px;
+      }
+
+      .col > a {
+        text-decoration: none;
+        color: black;
+      }
+
+      .card {
+        border-radius: 10px;
+        background-color: whitesmoke;
+      }
+
+      .card > img {
+        width: 252px;
+        height: 373px;
+        object-position: center;
+
+        margin: auto;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+
+        border-radius: 10px;
+      }
+
+      body {
+        background-color: RGBA(0, 133, 101, 0.2);
+      }
+
+      #value {
+        width: 500px;
+        font-size: 22px;
+      }
+    </style>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        listing();
+      });
+
+      function filter() {
+        var value, name, item, i;
+
+        value = document.getElementById("value").value.toUpperCase();
+        item = document.getElementsByClassName("item");
+
+        for (i = 0; i < item.length; i++) {
+          name = item[i].getElementsByClassName("name");
+          if (name[0].innerHTML.toUpperCase().indexOf(value) > -1) {
+            item[i].style.display = "";
+          } else {
+            let colelements = item[i].parentElement.parentElement.parentElement;
+            colelements.style.display = "none";
+          }
         }
       }
-    }
 
-    // document.getElementById("value").addEventListener("keyup", function (e) {
-    //   if (e.keyCode === 13) {
-    //     document.getElementById("inputbtn").click();
-    //   }
-    // });
-  </script>
+      function Searching() {
+        let value = document.getElementById("value").value.toUpperCase();
+        let item = document.getElementsByClassName("name");
+        $.ajax({
+          type: "GET",
+          url: "/search",
+          data: {},
+          success: function (response) {
+            let rows = response["books"];
+            for (let i = 0; i < rows.length; i++) {
+              let name = item[i].innerText;
+              let resulut = name.includes(value);
+              console.log(resulut);
+            }
+          },
+        });
+      }
+
+      function enterkey() {
+        if (window.event.keyCode == 13) {
+          filter();
+        }
+      }
+
+      function listing() {
+        $.ajax({
+          type: "GET",
+          url: "/review_test",
+          data: {},
+          success: function (response) {
+            let rows = response["books"];
+            // console.log(rows)
+            for (let i = 0; i < rows.length; i++) {
+              let content = rows[i]["content"];
+              let file = rows[i]["file"];
+              let title = rows[i]["title"];
+              let time = rows[i]["time"];
+              let number = rows[i]["content_no"];
+
+              let nickname = "nickname";
+
+              let temp_html = `<div class="col">
+                                  <a href="/detail/${number}" onclick="passdata()">
+                                    <div class="card">
+                                      <img
+                                        src="${file}"
+                                        class="card-img-top"
+                                        alt="${title}"
+                                      />
+                                      <div class="card-body item">
+                                        <span><h5 class="card-title name">${title}</h5></span>
+                                        <hr>
+                                        <p>${nickname}</p>
+                                      </div>
+                                    </div>
+                                  </a>
+                                </div>`;
+              $("#books_container").append(temp_html);
+            }
+          },
+        });
+      }
+      // .encode('ascii', 'ignore').decode(utf-8)
+    </script>
+  </head>
+
   <body>
     <div class="header">
-      <button type="button" class="btn btn-secondary">로그인</button>
-      <button type="button" class="btn btn-secondary">회원가입</button>
+      <div class="topbtn" id="navbar">
+        <a>{{ nickname }}님</a>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.location.href = '/login'"
+        >
+          로그인
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.location.href = '/register'"
+        >
+          회원가입
+        </button>
+      </div>
     </div>
     <h1 class="MainTitle">BookLog</h1>
-    <body>
-      <div class="searchbox">
-        <div class="header">
-          <input type="text" id="value" placeholder="Type to Search" />
-          <button
-            onclick="filter()"
-            id="inputbtn"
-            class="btn btn-secondary filterbtn"
-          >
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <!-- 찾기버튼 -->
-          </button>
-          <button
-            type="button"
-            onclick="window.location.href='/templates/index.html'"
-            class="btn btn-secondary filterbtn"
-          >
-            <i class="fa fa-home" aria-hidden="true"></i>
-            <!-- 홈버튼 -->
-          </button>
-          <button type="button" class="btn btn-secondary">작성</button>
-        </div>
+    <div class="searchbox">
+      <div class="header">
+        <input
+          type="text"
+          id="value"
+          onkeyup="enterkey()"
+          placeholder="Type to Search"
+        />
+        <button
+          onclick="filter()"
+          id="inputbtn"
+          class="btn btn-secondary filterbtn"
+        >
+          <i class="fa fa-search bodybtn" aria-hidden="true"></i>
+          <!-- 찾기버튼 -->
+        </button>
+        <button
+          type="button"
+          onclick="window.location.reload()"
+          class="btn btn-secondary filterbtn"
+        >
+          <i class="fa fa-home bodybtn" aria-hidden="true"></i>
+          <!-- 홈버튼 -->
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="window.location.href = '/edit-page'"
+        >
+          글작성
+        </button>
       </div>
-    </body>
+    </div>
     <div class="body container">
       <!-- <p>검색</p> -->
-      <div class="row row-cols-1 row-cols-md-3">
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <span><h5 class="card-title name">불편한 편의점</h5></span>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">편한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">싼편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">불친절한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">집앞 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">비싼 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">이상한 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-        <div class="col">
-          <a href="/">
-            <div class="card">
-              <img
-                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
-                class="card-img-top"
-                alt="..."
-              />
-              <div class="card-body item">
-                <h5 class="card-title name">이웃집 편의점</h5>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
+      <div id="books_container" class="row row-cols-2 row-cols-md-4"></div>
     </div>
-    <div class="footer">
-      <p>바닥</p>
-    </div>
+    <div class="footer"></div>
   </body>
 </html>
