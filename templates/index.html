@@ -113,7 +113,6 @@
       $(document).ready(function () {
         listing();
         hidebtn();
-        addnick()
       });
 
       let id_value = document.cookie.slice(8);
@@ -144,24 +143,9 @@
       function hidebtn() {
         if (document.cookie != "") {
           $("#navbar").toggleClass("is-hidden");
-          console.log(document.cookie)
-
+          console.log(document.cookie);
         }
       }
-
-    function addnick() {
-      $.ajax({
-        type: "POST",
-        url: "/index/addnick",
-        data: {
-        },
-      success: function(nick) {
-          temp=`<a id="nicknamebar">${nick["nick"]}님</a>`
-          $("#navbar").append(temp)
-        },
-      });
-    }
-
 
       function listing() {
         $.ajax({
@@ -179,6 +163,8 @@
               let number = rows[i]["content_no"];
               let nickname = rows[i]["writer_nickname"];
               let star = rows[i]["star_score"];
+              let star_img =
+                '<i class="fa fa-star" aria-hidden="true"></i>'.repeat(star);
 
               let temp_html = `<div class="col">
                                   <a href="/detail/${number}" onclick="passdata()">
@@ -190,8 +176,9 @@
                                       />
                                       <div class="card-body item">
                                         <span><h5 class="card-title name">${title}</h5></span>
-                                        <p>${star}</p>
                                         <hr>
+                                        <p>${star_img}</p>
+                                        <p>${star}</p>
                                         <p>${nickname}</p>
                                       </div>
                                     </div>

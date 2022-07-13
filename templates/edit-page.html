@@ -23,10 +23,11 @@
 
     <!-- Local CSS & JS import -->
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
     <script src="{{ url_for("static", filename="script.js") }}"></script>
 
     <!-- 이 페이지만 : 파일업로더 라이브러리 -->
-    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+    <!--  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script> -->
 
     <!-- 이 페이지 전용 script -->
     <script>
@@ -53,12 +54,13 @@
       }
       
       $(document).ready(function () {
-        bsCustomFileInput.init();
         render_nav('{{nickname}}')
+        star_score_visualizer(parseInt('{{star_score}}'))
 
         if ( '{{isEdit}}' ) {
           $("#naver_booksearch").empty();
           $("#review_content").val("{{content}}")
+          $("#star_score").val("{{star_score}}")
         }
       });
 
@@ -99,9 +101,11 @@
       function posting() {
 
         // 포스팅할 데이터 취합
-        let booktitle = $("#booktitle").val()
-        let review_content = $("#review_content").val();
-        let img_url = $("#image_url")[0]['src'].split('?')[0];
+        let booktitle = $("#booktitle").val().trim()
+        let review_content = $("#review_content").val().trim();
+        let img_url = $("#image_url")[0]['src'].split('?')[0].trim();
+        let writer = '{{nickname}}'.trim()
+        let star_score = parseInt($("#star_score").val());
 
         // FormData 객체에 담아, 전송 준비
         let form_data = new FormData();
@@ -109,6 +113,8 @@
         form_data.append("imgfile_give", img_url);
         form_data.append("booktitle_give", booktitle);
         form_data.append("review_content_give", review_content);
+        form_data.append("writer_nickname", writer);
+        form_data.append("star_score", star_score);
 
         // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert) 
         // data에 "form_data" 객체를 담아 전송 
@@ -125,10 +131,9 @@
             contentType: false,
             processData: false,
             success: function (response) {
-              window.location.reload();
+              window.location.href = '/';
             },
           });
-
         } else {
           // 신규이면 저장 기능 POST
           $.ajax({
@@ -139,13 +144,52 @@
             contentType: false,
             processData: false,
             success: function (response) {
-              window.location.reload();
+              window.location.href = '/';
             },
           });
   
         }
 
-        
+      }
+
+      function star_score_calculator() {
+
+        var star_score
+
+        if ($("#rating-5").is(":checked")) {
+          star_score = 5
+        }else if ($("#rating-4").is(":checked")){
+          star_score = 4
+        }else if ($("#rating-3").is(":checked")){
+          star_score = 3
+        }else if ($("#rating-2").is(":checked")){
+          star_score = 2
+        }else if ($("#rating-1").is(":checked")){
+          star_score = 1
+        }else{
+          star_score = 0
+        }
+
+        $("#star_score").val(star_score)
+
+      }
+
+      function star_score_visualizer(input_data) {
+
+        if (input_data == 5) {
+          $("#rating-5").prop('checked',true);
+        } else if (input_data == 4){
+          $("#rating-4").prop('checked',true);
+        } else if (input_data == 3){
+          $("#rating-3").prop('checked',true);
+        } else if (input_data == 2){
+          $("#rating-2").prop('checked',true);
+        } else if (input_data == 1){
+          $("#rating-1").prop('checked',true);
+        } else {
+          $("#rating-1").prop('checked',false);
+        }
+
       }
 
     </script>
@@ -181,7 +225,24 @@
 
         <div class="mb-3">
           <label for="booktitle" class="form-label">책 제목</label>
-          <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 입력해주세요." value="{% if title %} {{title}} {% else %} 책제목 {%endif%}" required>
+          <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 입력해주세요." value="{% if title %} {{title}} {% else %}책제목{%endif%}" required>
+        </div>
+        <div class="mb-3">
+          <label for="star_score" class="form-label">내 평점</label>
+          <input type="text" class="form-control d-none" id="star_score"> <!--숨겨짐-->
+          <div class="rating" onclick="star_score_calculator();">
+            <input type="radio" name="rating" id="rating-5">
+            <label for="rating-5"></label>
+            <input type="radio" name="rating" id="rating-4">
+            <label for="rating-4"></label>
+            <input type="radio" name="rating" id="rating-3">
+            <label for="rating-3"></label>
+            <input type="radio" name="rating" id="rating-2">
+            <label for="rating-2"></label>
+            <input type="radio" name="rating" id="rating-1">
+            <label for="rating-1"></label>
+          </div>
+
         </div>
         <div class="mb-3">
           <label for="review_content" class="form-label" >책 감상평</label>
@@ -225,3 +286,4 @@
     </div>
   </body>
 </html>
+
