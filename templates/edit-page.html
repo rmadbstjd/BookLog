@@ -30,12 +30,6 @@
 
     <!-- 이 페이지 전용 script -->
     <script>
-      
-      /* $("#button-to-openmodal").click(function(){
-        var data = $('#booknameSearch').val();
-          $("#contents.body-contents").val(data);
-          $("#text-contents.body-contents").html(data);
-      }); */
       function render_nav(nickname) {
         let nav_html = `<div class="topbtn mb-5">
             <a>${nickname}님</a>
@@ -61,13 +55,17 @@
       $(document).ready(function () {
         bsCustomFileInput.init();
         render_nav('{{nickname}}')
-        //listing();
+
+        console.log('{{isEdit}}')
+
+        if ( '{{isEdit}}' ) {
+          $("#naver_booksearch").empty();
+          $("#review_content").val("{{content}}")
+        }
       });
 
       function booksearch_listing() {
-
         var data = $('#booknameSearch').val();
-
         $.ajax({
           type: "POST",
           url: "/api/call-bookinfo",
@@ -101,7 +99,7 @@
       } 
 
       function posting() {
-        
+
         // 포스팅할 데이터 취합
         let booktitle = $("#booktitle").val()
         let review_content = $("#review_content").val();
@@ -117,18 +115,37 @@
         // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert) 
         // data에 "form_data" 객체를 담아 전송 
 
-        $.ajax({
-          type: "POST",
-          url: "/save-review",
-          data: form_data,
-          cache: false,
-          contentType: false,
-          processData: false,
-          success: function (response) {
-            window.location.reload();
-          },
-        });
-      
+        if ( '{{isEdit}}' ) {
+          form_data.append("edited_content_no", {{review_no}}); 
+
+          $.ajax({
+            type: "POST",
+            url: "/update-review",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              window.location.reload();
+            },
+          });
+
+        }else{
+
+          $.ajax({
+            type: "POST",
+            url: "/save-review",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+              window.location.reload();
+            },
+          });
+  
+        }
+
         
       }
 
@@ -145,13 +162,11 @@
 
     <div class="container mt-5"> 
 
-      <!-- 네이버 책 API 활용 기능 추가 예정 : https://developers.naver.com/apps/#/register?defaultScope=search -->
-      <div class="mb-5">
+      <div class="mb-5" id="naver_booksearch">
         <label for="booknameSearch" class="form-label">네이버 도서 검색</label>
         <div class="input-group mb-3">
           <input type="text" class="form-control" id="booknameSearch" placeholder="도서명" >
           <button class="btn btn-outline-secondary" type="button" id="button-to-openmodal" onclick="booksearch_listing();" data-bs-toggle="modal" data-bs-target="#exampleModal" >도서 검색</button>
-          <!-- <button class="btn btn-outline-secondary" type="button" id="button-to-openmodal" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="booksearch_listing()">도서 검색</button> -->
         </div>
       </div>
 
@@ -180,7 +195,6 @@
       </form>
 
       <!-- Modal -->
-
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl ">
           <div class="modal-content">
@@ -209,11 +223,6 @@
           </div>
         </div>
       </div>
-
     </div>
-
-
-
   </body>
-
 </html>

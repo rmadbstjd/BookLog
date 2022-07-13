@@ -8,15 +8,12 @@ import json
 import xmltodict, json
 import urllib
 
-
 import jwt
 import hashlib
 import certifi
-
-response = requests.get('https://mydomain.com', verify=False)
-ca = certifi.where()
-from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
+
+ca = certifi.where()
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -57,6 +54,19 @@ def detailedReview(reviewNo):
 def edit_page():
     return render_template("edit-page.html", nickname="둘리")
 
+@app.route('/edit/<reviewNo>')
+def edit_review(reviewNo):
+    
+    book_list = list(review_db.review_test.find({"content_no":int(reviewNo)},{'_id':False}))
+
+    print(book_list)
+    
+    title = book_list[0]['title']
+    content = book_list[0]['content']
+    image_url = book_list[0]['file']
+    
+    return render_template("edit-page.html", title=title, content=content, image=image_url, review_no=reviewNo, isEdit=title)
+
 # (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
 @app.route('/edit-page/<isbn>')
 def find_bookdetail_via_isbn(isbn):
@@ -73,7 +83,6 @@ def find_bookdetail_via_isbn(isbn):
     image_url = data['rss']['channel']['item']['image']
     author = data['rss']['channel']['item']['author']
     description = data['rss']['channel']['item']['description']
-    # data_to_send = {'title': title, 'image_url': image_url, "author":author, "description":description }
     
     return render_template("edit-page.html", title=title, image=image_url, author = author, description = description)
     
@@ -94,6 +103,30 @@ def give_bookInfo():
 # 작성된 리뷰를 저장
 @app.route('/save-review', methods=['POST'])
 def save_review():
+    
+    all_reviews = list(review_db.review_test.find({},{'_id':False}))
+    print(all_reviews[-1]['content_no'])
+    
+    booktitle = request.form['booktitle_give']
+    review_content = request.form['review_content_give']
+    img_url = request.form['imgfile_give']
+    
+    doc = {
+        'title': booktitle,
+        'content':review_content,
+        'file': img_url,
+        'time': datetime.now().strftime('%Y.%m.%d'),
+        'content_no': all_reviews[-1]['content_no']+1
+        }
+
+    review_db.review_test.insert_one(doc)
+    
+    return jsonify({'msg': '책 리뷰 저장 완료!'})
+
+
+# 수정된 리뷰를 저장
+@app.route('/update-review', methods=['POST'])
+def update_review():
     
     all_reviews = list(review_db.review_test.find({},{'_id':False}))
     print(all_reviews[-1]['content_no'])
