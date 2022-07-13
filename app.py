@@ -22,11 +22,11 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 SECRET_KEY = 'SPARTA'
 
 # user가 저장된 db
-client = MongoClient('mongodb+srv://rmadbstjd:kys3421@cluster0.xwuyi.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://rmadbstjd:kys3421@cluster0.xwuyi.mongodb.net/Cluster0?retryWrites=true&w=majority' , tlsCAFile=certifi.where())
 db = client.MINIPROJECT
 
 # 리뷰가 저장된 db
-review_client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
+review_client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority' , tlsCAFile=certifi.where())
 review_db = review_client.spart_week1
 
 # 메인페이지 @문동환
@@ -188,9 +188,7 @@ def login_check():
     check_done_receive = request.form['check_done_give']
     check_id_receive = request.form['check_id_give']
     user = db.users.find_one({'username': check_id_receive})
-    
     if  check_done_receive == 'success':
-
         return jsonify({'nickname' : user['nickname']})
 
 

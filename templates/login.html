@@ -100,7 +100,7 @@
               $.cookie("mytoken", response["token"], { path: "/" });
               login_check(response);
 
-              /*window.location.replace("/")*/
+              window.location.replace("/");
             } else {
               alert(response["msg"]);
             }

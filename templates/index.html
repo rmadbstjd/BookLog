@@ -17,6 +17,11 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+    <!-- Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
 
     <!-- JQuery를 import 합니다 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -25,36 +30,13 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
     <title>BookLog 메인페이지</title>
 
     <style>
-      .topbtn {
-        float: right;
-        width: 400px;
-        text-align: right;
-        margin-top: 30px;
-        margin-right: 25px;
-      }
-
-      .btn-secondary {
-        background-color: #8f4700;
-      }
-
-      .topbtn > button {
-        margin-left: 12px;
-      }
-
-      .topbtn > a {
-        margin-right: 10px;
-      }
-
       .MainTitle {
-        color: #8f4700;
         text-align: center;
-        padding-top: 60px;
-        margin-top: -14px;
-        margin-bottom: 20px;
-        margin-left: 430px;
 
         font-weight: 800;
         font-size: 5rem;
@@ -68,12 +50,6 @@
       .searchbox {
         width: 100%;
         text-align: center;
-      }
-
-      .writebtn {
-        float: right;
-        margin-right: 40px;
-        margin-bottom: 10px;
       }
 
       .body > p {
@@ -125,7 +101,7 @@
       }
 
       body {
-        background-color: RGBA(0, 133, 101, 0.2);
+        background-color: white;
       }
 
       #value {
@@ -136,6 +112,7 @@
     <script type="text/javascript">
       $(document).ready(function () {
         listing();
+        hidebtn();
       });
 
       function filter() {
@@ -179,6 +156,12 @@
         }
       }
 
+      function hidebtn() {
+        if (document.cookie != "") {
+          $("#navbar").toggleClass("is-hidden");
+        }
+      }
+
       function listing() {
         $.ajax({
           type: "GET",
@@ -186,7 +169,7 @@
           data: {},
           success: function (response) {
             let rows = response["books"];
-            // console.log(rows)
+            //console.log(rows);
             for (let i = 0; i < rows.length; i++) {
               let content = rows[i]["content"];
               let file = rows[i]["file"];
@@ -217,14 +200,13 @@
           },
         });
       }
-      // .encode('ascii', 'ignore').decode(utf-8)
     </script>
   </head>
 
   <body>
     <div class="header">
+      <a>{{ nickname }}님</a>
       <div class="topbtn" id="navbar">
-        <a>{{ nickname }}님</a>
         <button
           type="button"
           class="btn btn-secondary"
