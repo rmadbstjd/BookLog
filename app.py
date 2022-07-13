@@ -54,6 +54,7 @@ def detailedReview(reviewNo):
 def edit_page():
     return render_template("edit-page.html", nickname="둘리")
 
+# 수정페이지 @김보현
 @app.route('/edit/<reviewNo>')
 def edit_review(reviewNo):
     
@@ -67,7 +68,7 @@ def edit_review(reviewNo):
     
     return render_template("edit-page.html", title=title, content=content, image=image_url, review_no=reviewNo, isEdit=title)
 
-# (미완성) naverapi에서 검색어 불러오는 코드  (한글 인코딩 문제 있음 ㅠ)
+# 네이버를 통해 검색된 책자의 리뷰를 작성
 @app.route('/edit-page/<isbn>')
 def find_bookdetail_via_isbn(isbn):
     
@@ -85,22 +86,9 @@ def find_bookdetail_via_isbn(isbn):
     description = data['rss']['channel']['item']['description']
     
     return render_template("edit-page.html", title=title, image=image_url, author = author, description = description)
-    
-# naverapi에서 검색어 정보를 불러오는 코드
-@app.route('/api/call-bookinfo', methods=['POST'])
-def give_bookInfo():
 
-    data = urllib.parse.unquote(request.data)
-    print(data)
-    
-    # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
-    header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
-    r = requests.get('https://openapi.naver.com/v1/search/book.json?'+data, headers=header_info)
-    result = r.json()
-    
-    return result
 
-# 작성된 리뷰를 저장
+# 작성된 리뷰를 저장 @김보현
 @app.route('/save-review', methods=['POST'])
 def save_review():
     
@@ -121,31 +109,51 @@ def save_review():
 
     review_db.review_test.insert_one(doc)
     
-    return jsonify({'msg': '책 리뷰 저장 완료!'})
+    return render_template("index.html")
 
 
-# 수정된 리뷰를 저장
+# 수정된 리뷰를 저장 @김보현
 @app.route('/update-review', methods=['POST'])
 def update_review():
-    
-    all_reviews = list(review_db.review_test.find({},{'_id':False}))
-    print(all_reviews[-1]['content_no'])
     
     booktitle = request.form['booktitle_give']
     review_content = request.form['review_content_give']
     img_url = request.form['imgfile_give']
-    
-    doc = {
-        'title': booktitle,
-        'content':review_content,
-        'file': img_url,
-        'time': datetime.now().strftime('%Y.%m.%d'),
-        'content_no': all_reviews[-1]['content_no']+1
-        }
+    content_no = int(request.form['edited_content_no'])
 
-    review_db.review_test.insert_one(doc)
+    doc = {
+    'title': booktitle,
+    'content':review_content,
+    }
+        
+    review_db.review_test.update_one({'content_no':content_no},{'$set':doc})
     
-    return jsonify({'msg': '책 리뷰 저장 완료!'})
+    return render_template("index.html")
+
+
+# 리뷰 삭제 @김보현
+@app.route('/delete/<reviewNo>')
+def delete_review(reviewNo):
+    
+    review_db.review_test.delete_one({'content_no':int(reviewNo)})
+        
+    return render_template("index.html")
+    
+    
+# naverapi에서 검색어 정보를 불러오는 코드 @김보현
+@app.route('/api/call-bookinfo', methods=['POST'])
+def give_bookInfo():
+
+    data = urllib.parse.unquote(request.data)
+    print(data)
+    
+    # /api/call-bookinfo URL로 POST 방식으로 도착한 데이터
+    header_info = {"X-Naver-Client-Id": "0g0WhKXaBnkuD7TS7sEC", "X-Naver-Client-Secret": "EV_4uF2dqi"}
+    r = requests.get('https://openapi.naver.com/v1/search/book.json?'+data, headers=header_info)
+    result = r.json()
+    
+    return result
+
 
 
 # 로그인페이지 @금윤성
@@ -161,6 +169,7 @@ def sign_in():
     password_receive = request.form['password_give']
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
+    
     if result is not None:
         payload = {
             'id': username_receive,

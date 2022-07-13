@@ -115,6 +115,7 @@
         // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert) 
         // data에 "form_data" 객체를 담아 전송 
 
+        // 기존리뷰 수정이면 review_no 전달해서 업데이트 POST
         if ( '{{isEdit}}' ) {
           form_data.append("edited_content_no", {{review_no}}); 
 
@@ -131,7 +132,7 @@
           });
 
         }else{
-
+          // 신규이면 저장 기능 POST
           $.ajax({
             type: "POST",
             url: "/save-review",
@@ -190,7 +191,7 @@
         </div>
         <div class="mb-3 text-center">
         <button type="submit" class="btn btn-primary" onclick="posting();">등록</button>
-        <button type="button" class="btn btn-secondary">뒤로 가기</button>
+        <button type="button" class="btn btn-secondary" onclick="location.href='/'">홈으로 가기</button>
         </div>
       </form>
 
