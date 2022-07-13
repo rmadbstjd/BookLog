@@ -153,6 +153,8 @@
       function hidebtn() {
         if (document.cookie != "") {
           $("#navbar").toggleClass("is-hidden");
+        } else {
+          $("#header").toggleClass("is-hidden");
         }
       }
 
@@ -211,8 +213,9 @@
     </script>
   </head>
   <body>
-    <div class="header">
+    <div id="header" class="header">
       <a>{{ nickname }}</a>
+      <button type="button" class="is-hidden logout">로그아웃</button>
       <div class="topbtn" id="navbar">
         <button
           type="button"
