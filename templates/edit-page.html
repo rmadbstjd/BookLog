@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <title>북로그 수정</title>
+    <title>Booklog 작성</title>
     <!-- JQuery & Bootstrap import -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -33,8 +33,12 @@
     <script>
 
       $(document).ready(function () {
-        render_nav('{{ nickname }}')
-        star_score_visualizer(parseInt('{{star_score}}'))
+
+        let title = $(document).attr('title');
+        render_nav('{{ nickname }}', title);
+
+        star_score_visualizer(parseInt('{{star_score}}'));
+        addnick();
 
         if ( '{{isEdit}}' ) {
           $("#naver_booksearch").empty();
@@ -142,8 +146,7 @@
               },
               success: function(nick) {
         
-                temp=`<a id="nicknamebar">${nick["nick"]} 님</a>`
-                $("#navbar").append(temp)
+                $("#nickname").val(nick["nick"])
 
               },
         });
@@ -193,17 +196,8 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-light" id="nav">
-    </nav>
 
-    <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-      <div class="col-md-6 px-0">
-        <h1 class="display-4 font-italic">Booklog 작성</h1>
-        <p class="lead my-3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur est natus quaerat distinctio laborum obcaecati impedit incidunt!</p> 
-
-      </div>
-    </div>
-
+    <header id="header_above"></header>
 
     <div class="container mt-5"> 
       <div class="mb-5" id="naver_booksearch">
@@ -228,7 +222,7 @@
           <label for="booktitle" class="form-label">책 제목</label>
           <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 입력해주세요." value="{% if title %} {{title}} {% else %}책제목{%endif%}" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 ">
           <label for="star_score" class="form-label">내 평점</label>
           <input type="text" class="form-control d-none" id="star_score"> <!--숨겨짐-->
           <div class="rating" onclick="star_score_calculator();">

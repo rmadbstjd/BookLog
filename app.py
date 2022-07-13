@@ -23,8 +23,8 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 SECRET_KEY = 'SPARTA'
 
 # user가 저장된 db
-client = MongoClient('mongodb+srv://rmadbstjd:kys3421@cluster0.xwuyi.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.MINIPROJECT
+client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
+db = client.spart_week1
 
 # 리뷰가 저장된 db
 review_client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
@@ -65,7 +65,12 @@ def detail_bookdata(num):
 # 작성페이지 @김보현
 @app.route('/edit-page')
 def edit_page():
-    return render_template("edit-page.html", nickname="둘리")
+    
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    nickname = payload['nickname']
+
+    return render_template("edit-page.html", nickname=nickname)
 
 # 수정페이지 @김보현
 @app.route('/edit/<reviewNo>')
@@ -118,7 +123,7 @@ def save_review():
         'content':review_content,
         'file': img_url,
         'time': datetime.now().strftime('%Y.%m.%d.%H:%M:%S'),
-        'writer_nickname' : '둘리',
+        'writer_nickname' : writer_nickname,
         'star_score' : star_score,
         'content_no': review_count
         }
@@ -174,28 +179,34 @@ def login():
     return render_template("login.html")
 
 # 로그인  @금윤성
+
+    
 @app.route('/login/sign_in', methods=['POST'])
 def sign_in():
-
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
+    user_nickname = db.users.find_one({'username': username_receive})
+    nick =user_nickname['nickname']
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
     if result is not None:
         payload = {
-            'id': username_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+        'id': username_receive,
+        'nickname': nick,
+        'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24) # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-        return jsonify({'result': 'success', 'token': token, 'id' : payload["id"]})
+        return jsonify({'result': 'success', 'token': token, 'id': payload["id"], 'nickname': payload["nickname"]})
     # 찾지 못하면
     else:
+        
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 # 로그인 체크, 닉네임 반환 @금윤성
 @app.route('/login/login_check', methods=['POST'])
 def login_check():
+    
     check_done_receive = request.form['check_done_give']
     check_id_receive = request.form['check_id_give']
     user = db.users.find_one({'username': check_id_receive})

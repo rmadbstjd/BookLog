@@ -17,6 +17,11 @@
 
     <title>내가 읽은 책 상세페이지</title>
 
+    <!-- Local CSS & JS import -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
+    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
+
     <style>
         * {
             font-family: 'Gowun Batang', serif;
@@ -45,7 +50,10 @@
 
     </style>
     <script>
+
         $(document).ready(function () {
+            let title = $(document).attr('title');
+            render_nav('{{ nickname }}', title);
             show_detail();
         });
 
@@ -72,6 +80,9 @@
     </script>
 </head>
 <body>
+
+    <header id="header_above"></header>
+
 <div class="mask"></div>
 <div class="detail">
     <h1>BookLog Detail Page</h1>
@@ -87,27 +98,20 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <th scope="row">책 번호 : {{reviewNo}} </th>
+                    <th scope="row">책 번호 : {{book_num}} </th>
                 </tr>
                 <tr>
-                    <th scope="row">책 내용 : {{reviewNo}} {{book_content}}
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.</th>
+                    <th scope="row">책 내용 : {{book_content}}
+                    </th>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
     <div style="display: flex; justify-content: center;">
-              <a href="/templates/index.html" class="btn btn-warning mybtn">Home</a>
-              <a href="/edit/{{reviewNo}}" class="btn btn-warning mybtn">Edit</a>
-              <a href="/delete/{{reviewNo}}" class="btn btn-warning mybtn">Delete</a>
+              <a href="/" class="btn btn-warning mybtn">Home</a>
+              <a href="/edit/{{book_num}}" class="btn btn-warning mybtn">Edit</a>
+              <a href="/delete/{{book_num}}" class="btn btn-warning mybtn">Delete</a>
     </div>
 
     </div>

@@ -94,10 +94,6 @@
   border-radius: 10px;
 }
 
-body {
-  background-color: RGBA(0, 133, 101, 0.2);
-}
-
 #value {
   width: 500px;
   font-size: 22px;

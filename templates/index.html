@@ -25,116 +25,19 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <title>BookLog 메인페이지</title>
+    <title>BookLog</title>
 
-    <style>
-      .topbtn {
-        float: right;
-        width: 400px;
-        text-align: right;
-        margin-top: 30px;
-        margin-right: 25px;
-      }
+    <!-- Local CSS & JS import -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
+    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
-      .btn-secondary {
-        background-color: #8f4700;
-      }
-
-      .topbtn > button {
-        margin-left: 12px;
-      }
-
-      .topbtn > a {
-        margin-right: 10px;
-      }
-
-      .MainTitle {
-        color: #8f4700;
-        text-align: center;
-        padding-top: 60px;
-        margin-top: -14px;
-        margin-bottom: 20px;
-        margin-left: 430px;
-
-        font-weight: 800;
-        font-size: 5rem;
-        font-family: "Dongle", sans-serif;
-      }
-
-      .body {
-        width: 95%;
-      }
-
-      .searchbox {
-        width: 100%;
-        text-align: center;
-      }
-
-      .writebtn {
-        float: right;
-        margin-right: 40px;
-        margin-bottom: 10px;
-      }
-
-      .body > p {
-        text-align: center;
-      }
-
-      .row {
-        margin-top: 50px;
-        width: 100%;
-      }
-
-      .card {
-        width: 300px;
-        height: 520px;
-        margin-bottom: 40px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .name {
-        margin-bottom: -5px;
-      }
-
-      .item > p {
-        margin-top: -5px;
-      }
-
-      .col > a {
-        text-decoration: none;
-        color: black;
-      }
-
-      .card {
-        border-radius: 10px;
-        background-color: whitesmoke;
-      }
-
-      .card > img {
-        width: 252px;
-        height: 373px;
-        object-position: center;
-
-        margin: auto;
-        margin-top: 20px;
-        margin-left: auto;
-        margin-right: auto;
-
-        border-radius: 10px;
-      }
-
-      body {
-        background-color: RGBA(0, 133, 101, 0.2);
-      }
-
-      #value {
-        width: 500px;
-        font-size: 22px;
-      }
-    </style>
     <script type="text/javascript">
       $(document).ready(function () {
+
+        let title = $(document).attr('title');
+        render_nav('{{ nickname }}', title);
+
         listing();
       });
 
@@ -217,12 +120,16 @@
           },
         });
       }
-      // .encode('ascii', 'ignore').decode(utf-8)
+
+    
     </script>
   </head>
 
   <body>
-    <div class="header">
+
+    <header id="header_above"></header>
+
+    <!-- <div class="header">
       <div class="topbtn" id="navbar">
         <a>{{ nickname }}님</a>
         <button
@@ -242,7 +149,10 @@
       </div>
     </div>
     <h1 class="MainTitle">BookLog</h1>
-    <div class="searchbox">
+
+    -->
+
+    <div class="searchbox mt-5">
       <div class="header">
         <input
           type="text"
