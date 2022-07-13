@@ -97,7 +97,7 @@
           },
           success: function (response, id) {
             if (response["result"] == "success") {
-              $.cookie("mytoken", response["token"], { path: "/" });
+              $.cookie("mytoken", response[("token", "id")], { path: "/" });
               login_check(response);
 
               window.location.replace("/");
