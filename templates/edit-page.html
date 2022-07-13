@@ -27,7 +27,7 @@
     <script src="{{ url_for("static", filename="script.js") }}"></script>
 
     <!-- 이 페이지만 : 파일업로더 라이브러리 -->
-    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+    <!--  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script> -->
 
     <!-- 이 페이지 전용 script -->
     <script>
@@ -54,8 +54,8 @@
       }
       
       $(document).ready(function () {
-        // bsCustomFileInput.init(); 
         render_nav('{{nickname}}')
+        $("#star_score").val(star_score)
 
         if ( '{{isEdit}}' ) {
           $("#naver_booksearch").empty();
@@ -154,6 +154,27 @@
 
       }
 
+      function star_score_calculator() {
+
+        var star_score
+
+        if ($("#rating-5").is(":checked")) {
+          star_score = 5
+        }else if ($("#rating-4").is(":checked")){
+          star_score = 4
+        }else if ($("#rating-3").is(":checked")){
+          star_score = 3
+        }else if ($("#rating-2").is(":checked")){
+          star_score = 2
+        }else if ($("#rating-1").is(":checked")){
+          star_score = 1
+        }else{
+          star_score = 0
+        }
+
+        $("#star_score").val(star_score)
+
+      }
 
     </script>
   </head>
@@ -192,8 +213,7 @@
         </div>
         <div class="mb-3">
           <label for="star_score" class="form-label">내 평점</label>
-          <input type="text" class="form-control" id="star_score" placeholder="4">
-
+          <input type="text" class="form-control d-none" id="star_score"> <!--숨겨짐-->
           <div class="rating" onclick="star_score_calculator();">
             <input type="radio" name="rating" id="rating-5">
             <label for="rating-5"></label>
