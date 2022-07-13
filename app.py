@@ -14,12 +14,12 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-client = MongoClient('mongodb+srv://rmadbstjd:kys3421@cluster0.xwuyi.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.MINIPROJECT
+#client = MongoClient('mongodb+srv://rmadbstjd:kys3421@cluster0.xwuyi.mongodb.net/Cluster0?retryWrites=true&w=majority')
+#db = client.MINIPROJECT
 
 
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
-# db = client.spart_week1
+client = MongoClient('mongodb+srv://test:sparta@cluster0.plrlvlp.mongodb.net/?retryWrites=true&w=majority')
+db = client.spart_week1
 
 # 메인페이지 @문동환
 @app.route('/')
