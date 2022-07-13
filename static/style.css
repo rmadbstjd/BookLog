@@ -55,14 +55,6 @@
   width: 100%;
 }
 
-.card {
-  width: 300px;
-  height: 520px;
-  margin-bottom: 40px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .name {
   margin-bottom: -5px;
 }
@@ -76,25 +68,17 @@
   color: black;
 }
 
+#value {
+  width: 500px;
+  font-size: 22px;
+}
+
 .card {
   border-radius: 10px;
   background-color: whitesmoke;
 }
 
 .card > img {
-  width: 252px;
-  height: 373px;
-  object-position: center;
-
-  margin: auto;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-
+  height: 40vh;
   border-radius: 10px;
-}
-
-#value {
-  width: 500px;
-  font-size: 22px;
 }

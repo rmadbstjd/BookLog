@@ -93,7 +93,7 @@
             for (let i = 0; i < rows.length; i++) {
               let content = rows[i]["content"];
               let file = rows[i]["file"];
-              let title = rows[i]["title"];
+              let title = rows[i]["title"].split('(')[0];
               let time = rows[i]["time"];
               let number = rows[i]["content_no"];
 
@@ -101,13 +101,13 @@
 
               let temp_html = `<div class="col">
                                   <a href="/detail/${number}" onclick="passdata()">
-                                    <div class="card">
+                                    <div class="card shadow-sm align-items-center">
                                       <img
                                         src="${file}"
-                                        class="card-img-top"
+                                        class="bd-placeholder-img card-img-top mx-1"
                                         alt="${title}"
                                       />
-                                      <div class="card-body item">
+                                      <div class="card-body">
                                         <span><h5 class="card-title name">${title}</h5></span>
                                         <hr>
                                         <p>${nickname}</p>
@@ -185,9 +185,11 @@
         </button>
       </div>
     </div>
+
+
     <div class="body container">
       <!-- <p>검색</p> -->
-      <div id="books_container" class="row row-cols-2 row-cols-md-4"></div>
+      <div id="books_container" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4"></div>
     </div>
     <div class="footer"></div>
   </body>
