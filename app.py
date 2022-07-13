@@ -58,8 +58,12 @@ def detail_bookdata(num):
     book_title = book_list[0]['title']
     book_content = book_list[0]['content']
     book_imageurl = book_list[0]['file']
+    book_nick = book_list[0]['writer_nickname']
+    book_time = book_list[0]['time']
+    book_score = book_list[0]['star_score']
 
-    return render_template("detail.html", book_title=book_title, book_content=book_content, book_imageurl=book_imageurl, book_num=num)
+    return render_template("detail.html", book_title=book_title, book_content=book_content, book_imageurl=book_imageurl,
+                           book_time=book_time, book_num=num,book_score=book_score,book_nick=book_nick)
     
     
 # 작성페이지 @김보현

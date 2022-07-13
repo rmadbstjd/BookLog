@@ -55,67 +55,74 @@
             let title = $(document).attr('title');
             render_nav('{{ nickname }}', title);
             show_detail();
+            
+            addNickname();
         });
-
-        function show_detail() {
-            $.ajax({
-                type: 'GET',
-                url: '/detail/reviewData',
-                data: {},
-                success: function (response) {
-                    let rows = response['bookData']
-                    for (let i = 0; i< rows.length; i++ ){
-                        let title = rows[i]['title']
-                        let content = rows[i]['content']
-                        let file = rows[i]['file']
-                        let time = rows[i]['time']
-                        let content_no = rows[i]['content_no']
-                        console.log(content_no, title, content,time,file)
-
+    
+            function show_detail() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/detail/reviewData',
+                    data: {},
+                    success: function (response) {
+                        let rows = response['bookData']
+                        for (let i = 0; i< rows.length; i++ ){
+                            let title = rows[i]['title']
+                            let content = rows[i]['content']
+                            let file = rows[i]['file']
+                            let time = rows[i]['time']
+                            let content_no = rows[i]['content_no']
+                            console.log(content_no, title, content,time,file)
+    
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+            
+
+        </script>
 
     </script>
 </head>
-<body>
+    <body>
+        <header id="header_above"></header>
 
-    <header id="header_above"></header>
-
-<div class="mask"></div>
-<div class="detail">
-    <h1>BookLog Detail Page</h1>
-
-    <div class="show_book" >
-        <img src="{{book_imageurl}}" class="card-img-top" alt="Img">
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">책 제목 : {{book_title}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row">책 번호 : {{book_num}} </th>
-                </tr>
-                <tr>
-                    <th scope="row">책 내용 : {{book_content}}
-                    </th>
-                </tr>
-                </tbody>
-            </table>
+        <div class="mask"></div>
+        <div class="detail">
+            <h1>BookLog Detail Page</h1>
+        
+            <div class="show_book" >
+                <img src="{{book_imageurl}}" class="card-img-top" alt="Img">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">책 제목 : {{book_title}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">책 번호 : {{ book_num }} / 작성자 : {{book_nick}} / 작성일 {{book_time}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">별점 : {{ book_score }}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">책 내용 : {{book_content}}
+                            </th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                      <a href="/" class="btn btn-warning mybtn">Home</a>
+                      <a href="/edit/{{book_num}}" class="btn btn-warning mybtn">Edit</a>
+                      <a href="/delete/{{book_num}}" class="btn btn-warning mybtn">Delete</a>
+            </div>
+        
+            </div>
+        
         </div>
-    </div>
-    <div style="display: flex; justify-content: center;">
-              <a href="/" class="btn btn-warning mybtn">Home</a>
-              <a href="/edit/{{book_num}}" class="btn btn-warning mybtn">Edit</a>
-              <a href="/delete/{{book_num}}" class="btn btn-warning mybtn">Delete</a>
-    </div>
-
-    </div>
-
-</div>
-</body>
-</html>
+        </body>
+        </html>

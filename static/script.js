@@ -21,11 +21,23 @@ function render_nav(nickname, title) {
       <div class="jumbotron p-5 p-md-5 text-white rounded bg-info">
         <div class="col-md-6 px-0">
           <h1 class="display-4 font-italic">${title}</h1>
-          <p class="lead my-3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur est natus quaerat distinctio laborum obcaecati impedit incidunt!</p> 
+          <p class="lead my-3">책을 읽고 느낀 것들을 공유하는 공간 - 
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur!</p> 
 
         </div>
       </div>
       `;
 
   $("#header_above").append(nav_html);
+}
+
+function addNickname() {
+  $.ajax({
+    type: "POST",
+    url: "/index/addnick",
+    data: {},
+    success: function (nick) {
+      $("#nickname").val(nick["nick"]);
+    },
+  });
 }

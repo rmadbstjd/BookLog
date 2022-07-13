@@ -39,7 +39,14 @@
         render_nav('{{ nickname }}', title);
 
         listing();
+        hidebtn();
+
+        addNickname();
+
       });
+
+      let id_value = document.cookie.slice(8);
+
 
       function filter() {
         var value, name, item, i;
@@ -58,29 +65,30 @@
         }
       }
 
-      function Searching() {
-        let value = document.getElementById("value").value.toUpperCase();
-        let item = document.getElementsByClassName("name");
-        $.ajax({
-          type: "GET",
-          url: "/search",
-          data: {},
-          success: function (response) {
-            let rows = response["books"];
-            for (let i = 0; i < rows.length; i++) {
-              let name = item[i].innerText;
-              let resulut = name.includes(value);
-              console.log(resulut);
-            }
-          },
-        });
-      }
-
       function enterkey() {
         if (window.event.keyCode == 13) {
           filter();
         }
       }
+
+      function hidebtn() {
+        if (document.cookie != "") {
+          $("#navbar").toggleClass("is-hidden");
+        }
+      }
+
+
+      /* function getnickname() {
+        $.ajax({
+          type: "POST",
+          url: "/passid",
+          data: {
+            id_value_give: id_value,
+          },
+          success: function (response) {},
+        });
+      } */
+
 
       function listing() {
         $.ajax({
@@ -89,28 +97,31 @@
           data: {},
           success: function (response) {
             let rows = response["books"];
-            // console.log(rows)
+            //console.log(rows);
             for (let i = 0; i < rows.length; i++) {
               let content = rows[i]["content"];
               let file = rows[i]["file"];
-              let title = rows[i]["title"].split('(')[0];
+              let title = rows[i]["title"];
               let time = rows[i]["time"];
               let number = rows[i]["content_no"];
-
-              let nickname = "nickname";
+              let nickname = rows[i]["writer_nickname"];
+              let star = rows[i]["star_score"];
+              let star_img = "⭐️".repeat(star);
 
               let temp_html = `<div class="col">
                                   <a href="/detail/${number}" onclick="passdata()">
-                                    <div class="card shadow-sm align-items-center">
+                                    <div class="card">
                                       <img
                                         src="${file}"
-                                        class="bd-placeholder-img card-img-top mx-1"
+                                        class="card-img-top"
                                         alt="${title}"
                                       />
-                                      <div class="card-body">
+                                      <div class="card-body item">
                                         <span><h5 class="card-title name">${title}</h5></span>
-                                        <hr>
-                                        <p>${nickname}</p>
+                                        <div class="nickstar">
+                                          <p>${nickname}</p>
+                                          <p class="star_img">${star_img}</p>
+                                        </div>
                                       </div>
                                     </div>
                                   </a>
