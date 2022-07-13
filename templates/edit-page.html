@@ -24,37 +24,16 @@
     <!-- Local CSS & JS import -->
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
     <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
-    <script src="{{ url_for("static", filename="script.js") }}"></script>
+    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
     <!-- 이 페이지만 : 파일업로더 라이브러리 -->
     <!--  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script> -->
 
     <!-- 이 페이지 전용 script -->
     <script>
-      function render_nav(nickname) {
-        let nav_html = `<div class="topbtn mb-5">
-            <a>${nickname}님</a>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="window.location.href = '/login'"
-            >
-              로그인
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              onclick="window.location.href = '/register'"
-            >
-              회원가입
-            </button>
-          </div>`;
-      
-        $("#nav").append(nav_html);
-      }
-      
+
       $(document).ready(function () {
-        render_nav('{{nickname}}')
+        render_nav('{{ nickname }}')
         star_score_visualizer(parseInt('{{star_score}}'))
 
         if ( '{{isEdit}}' ) {
@@ -152,6 +131,22 @@
 
       }
 
+      function addnick() {
+        $.ajax(
+          {
+              type: "POST",
+              url: "/index/addnick",
+              data: {
+              },
+              success: function(nick) {
+        
+                temp=`<a id="nicknamebar">${nick["nick"]} 님</a>`
+                $("#navbar").append(temp)
+
+              },
+        });
+      }
+
       function star_score_calculator() {
 
         var star_score
@@ -196,15 +191,19 @@
   </head>
 
   <body>
-    <div class="header mb-5 " id="nav">
+    <nav class="navbar navbar-expand-lg bg-light" id="nav">
+    </nav>
+
+    <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
+      <div class="col-md-6 px-0">
+        <h1 class="display-4 font-italic">Booklog 작성</h1>
+        <p class="lead my-3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur est natus quaerat distinctio laborum obcaecati impedit incidunt!</p> 
+
+      </div>
     </div>
-  
-    <div class="container-fluid mb-5 ">
-      <h1 class="MainTitle mb-5 ">BookLog 작성</h1>
-    </div>
+
 
     <div class="container mt-5"> 
-
       <div class="mb-5" id="naver_booksearch">
         <label for="booknameSearch" class="form-label">네이버 도서 검색</label>
         <div class="input-group mb-3">

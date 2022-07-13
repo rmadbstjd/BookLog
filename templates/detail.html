@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -51,10 +52,19 @@
         function show_detail() {
             $.ajax({
                 type: 'GET',
-                url: '/detail',
+                url: '/detail/reviewData',
                 data: {},
                 success: function (response) {
-                    console.log(response)
+                    let rows = response['bookData']
+                    for (let i = 0; i< rows.length; i++ ){
+                        let title = rows[i]['title']
+                        let content = rows[i]['content']
+                        let file = rows[i]['file']
+                        let time = rows[i]['time']
+                        let content_no = rows[i]['content_no']
+                        console.log(content_no, title, content,time,file)
+
+                    }
                 }
             });
         }
@@ -64,32 +74,41 @@
 <body>
 <div class="mask"></div>
 <div class="detail">
-    <h1>{{reviewNo}} 번째 책에 대한 BookLog Detail Page</h1>
+    <h1>BookLog Detail Page</h1>
 
-    <p></p>
     <div class="show_book" >
-        <img src="http://placeimg.com/640/480/any" class="card-img-top" alt="Img">
+        <img src="{{book_imageurl}}" class="card-img-top" alt="Img">
         <div class="card-body">
-            <h5 class="card-title">책 제목 : </h5>
-            <p class="card-text">책 내용 이쪽으로 받아서 출력 <br>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">책 제목 : {{book_title}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">책 번호 : {{reviewNo}} </th>
+                </tr>
+                <tr>
+                    <th scope="row">책 내용 : {{reviewNo}} {{book_content}}
+                    Some quick example text to build on the card title and make up the bulk of the card's content.
                 Some quick example text to build on the card title and make up the bulk of the card's content.
                 Some quick example text to build on the card title and make up the bulk of the card's content.
                 Some quick example text to build on the card title and make up the bulk of the card's content.
                 Some quick example text to build on the card title and make up the bulk of the card's content.
                 Some quick example text to build on the card title and make up the bulk of the card's content.
                 Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-
-            </p>
+                Some quick example text to build on the card title and make up the bulk of the card's content.</th>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div style="display: flex; justify-content: center;">
-              <a href="/" class="btn btn-warning mybtn">Home</a>
+              <a href="/templates/index.html" class="btn btn-warning mybtn">Home</a>
               <a href="/edit/{{reviewNo}}" class="btn btn-warning mybtn">Edit</a>
               <a href="/delete/{{reviewNo}}" class="btn btn-warning mybtn">Delete</a>
     </div>
-
 
     </div>
 
