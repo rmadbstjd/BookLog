@@ -194,8 +194,6 @@ def login_check():
         return jsonify({'nickname' : user['nickname']})
 
 
-
-
 # 회원가입 페이지 @금윤성
 @app.route('/register')
 def register():

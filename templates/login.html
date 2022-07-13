@@ -25,6 +25,7 @@
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
     <style>
       body {
         background-color: RGBA(0, 133, 101, 0.2);
@@ -64,9 +65,6 @@
       }
     </style>
     <script>
-      // {% if msg %}
-      //     alert("{{ msg }}")
-      // {% endif %}
       function sign_in() {
         let username = $("#input-username").val();
         let password = $("#input-password").val();
@@ -100,13 +98,14 @@
               $.cookie("mytoken", response["token"], { path: "/" });
               login_check(response);
 
-              /*window.location.replace("/")*/
+              window.location.replace("/");
             } else {
               alert(response["msg"]);
             }
           },
         });
       }
+
       function login_check(response) {
         let check = response["result"];
         let check_id = response["id"];
@@ -128,6 +127,7 @@
         let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
         return regExp.test(asValue);
       }
+
       function is_nick(asValue) {
         let regExp = /^[가-힣]{2,4}$/;
         return regExp.test(asValue);
