@@ -12,10 +12,21 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+
+    <!-- Bulma CSS -->
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+      />
+
     <!-- Font Awesome CSS -->
     <link
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
     />
 
     <!-- JQuery를 import 합니다 -->
@@ -42,7 +53,6 @@
         hidebtn();
 
         addNickname();
-
       });
 
       let id_value = document.cookie.slice(8);
@@ -70,10 +80,17 @@
         }
       }
 
-      function hidebtn() {
-        if (document.cookie != "") {
-          $("#navbar").toggleClass("is-hidden");
-        }
+      function addnick() {
+        $.ajax(
+          {
+              type: "POST",
+              url: "/index/addnick",
+              data: {
+              },
+              success: function(nick) {
+                $("#nickname").text(nick["nick"])
+              },
+        });
       }
 
       function listing() {
@@ -125,69 +142,44 @@
   <body>
 
     <header id="header_above"></header>
-
-    <!-- <div class="header">
-      <div class="topbtn" id="navbar">
-        <a>{{ nickname }}님</a>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="window.location.href = '/login'"
-        >
-          로그인
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="window.location.href = '/register'"
-        >
-          회원가입
-        </button>
-      </div>
-    </div>
-    <h1 class="MainTitle">BookLog</h1>
-
-    -->
-
     <div class="searchbox mt-5">
       <div class="header">
-        <input
-          type="text"
-          id="value"
-          onkeyup="enterkey()"
-          placeholder="Type to Search"
-        />
-        <button
-          onclick="filter()"
-          id="inputbtn"
-          class="btn btn-secondary filterbtn"
-        >
-          <i class="fa fa-search bodybtn" aria-hidden="true"></i>
-          <!-- 찾기버튼 -->
-        </button>
-        <button
-          type="button"
-          onclick="window.location.reload()"
-          class="btn btn-secondary filterbtn"
-        >
-          <i class="fa fa-home bodybtn" aria-hidden="true"></i>
-          <!-- 홈버튼 -->
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="window.location.href = '/edit-page'"
-        >
-          글작성
-        </button>
+        <div class="input-group searchbox">
+          <input
+            type="text"
+            id="value"
+            class="form-control"
+            placeholder="Type to Search"
+            aria-label="Recipient's username with two button addons"
+            onkeyup="enterkey()"
+          />
+          <button
+            class="btn btn-outline-secondary filterbtn"
+            type="button"
+            onclick="filter()"
+          >
+            <i class="fa fa-search bodybtn" aria-hidden="true"></i>
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            onclick="window.location.reload()"
+          >
+            <i class="fa fa-home bodybtn" aria-hidden="true"></i>
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            onclick="window.location.href = '/edit-page'"
+          >
+            글작성
+          </button>
+        </div>
       </div>
     </div>
-
-
     <div class="body container">
       <!-- <p>검색</p> -->
       <div id="books_container" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4"></div>
     </div>
-    <div class="footer"></div>
   </body>
 </html>
