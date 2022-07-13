@@ -122,6 +122,7 @@
       $(document).ready(function () {
         listing();
         hidebtn();
+        // getnickname();
       });
 
       let id_value = document.cookie.slice(8);
@@ -152,20 +153,19 @@
       function hidebtn() {
         if (document.cookie != "") {
           $("#navbar").toggleClass("is-hidden");
-          console.log(document.cookie);
         }
       }
-      function getnickname() {
+
+      /* function getnickname() {
         $.ajax({
           type: "POST",
-          url: "/login/sign_in",
+          url: "/passid",
           data: {
-            username_give: username,
-            password_give: password,
+            id_value_give: id_value,
           },
           success: function (response) {},
         });
-      }
+      } */
 
       function listing() {
         $.ajax({
@@ -212,6 +212,7 @@
   </head>
   <body>
     <div class="header">
+      <a>{{ nickname }}</a>
       <div class="topbtn" id="navbar">
         <button
           type="button"

@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass
+from tokenize import String
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from jinja2 import Undefined
 from pymongo import MongoClient
@@ -51,13 +52,13 @@ def main_get():
     book_list = list(review_db.review_test.find({},{'_id':False}))
     return jsonify({'books':book_list})
 
-@app.route("/passid", methods=["POST"])
-def get_nickname():
-    id_value_receive = request.form['id_value_give']
-    user_nickname = list(db.users.find({'username': id_value_receive},{'_id':False}))
-    nickname = user_nickname[0]['nickname']
-    print(nickname)
-    return render_template("index.html", nickname=nickname)
+# @app.route("/passid", methods=["POST"])
+# def get_nickname():
+#     id_value_receive = request.form['id_value_give']
+#     user_nickname = list(db.users.find({'username': id_value_receive},{'_id':False}))
+#     nickname = user_nickname[0]['nickname']
+#     print(nickname)
+#     return render_template("index.html", nickname=nickname)
 
 
 # 상세페이지 @최효선
@@ -197,8 +198,6 @@ def login():
 
 @app.route('/login/sign_in', methods=['POST'])
 def sign_in():
-    # 로그인
-
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
@@ -206,9 +205,10 @@ def sign_in():
     if result is not None:
         payload = {
             'id': username_receive,
-            'nickname': nick,
+            # 'nickname': nickname,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
+
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
         return jsonify({'result': 'success', 'token': token, 'id' : payload["id"]})
