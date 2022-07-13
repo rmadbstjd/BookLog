@@ -45,11 +45,23 @@ def main_get():
 def detail():
     return render_template("detail.html")
 
-@app.route('/detail/<reviewNo>')
-def detailedReview(reviewNo):
-    
-    return render_template("detail.html", reviewNo=reviewNo)
+@app.route('/detail/reviewData', methods=["GET"])
+def detail_data():
+    book_data = list(review_db.review_test.find({}, {'_id': False}))
+    return jsonify({'bookData':book_data})
 
+@app.route('/detail/<num>')
+def detail_bookdata(num):
+
+    book_list = list(review_db.review_test.find({"content_no": int(num)}, {'_id': False}))
+    
+    book_title = book_list[0]['title']
+    book_content = book_list[0]['content']
+    book_imageurl = book_list[0]['file']
+
+    return render_template("detail.html", book_title=book_title, book_content=book_content, book_imageurl=book_imageurl, book_num=num)
+    
+    
 # 작성페이지 @김보현
 @app.route('/edit-page')
 def edit_page():

@@ -33,7 +33,7 @@
     <script>
 
       $(document).ready(function () {
-        render_nav('{{nickname}}')
+        render_nav('{{ nickname }}')
         star_score_visualizer(parseInt('{{star_score}}'))
 
         if ( '{{isEdit}}' ) {
@@ -193,23 +193,7 @@
   </head>
 
   <body>
-    <!-- <div class="header mb-5 " id="nav">
-    </div> -->
-
-    <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link" href="/login">로그인</a>
-            <a class="nav-link" href='/register'>회원가입</a>
-            <a class="nav-link disabled" id="nickname">${nickname}님</a>
-          </div>
-        </div>
-      </div>
+    <nav class="navbar navbar-expand-lg bg-light" id="nav">
     </nav>
 
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
