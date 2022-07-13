@@ -12,14 +12,14 @@ function render_nav(nickname, title) {
             <a class="nav-link text-dark" href='/register'>회원가입</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark disabled" id="nickname">${nickname} 님</a>
+            <a class="nav-link text-dark disabled" id="nickname"></a>
           </li>
         </ul>
       </div>
       </nav>
 
       <div class="jumbotron p-5 p-md-5 text-white rounded bg-info">
-        <div class="col-md-6 px-0">
+        <div class="col-md-8 px-0">
           <h1 class="display-4 font-italic">${title}</h1>
           <p class="lead my-3">책을 읽고 느낀 것들을 공유하는 공간 - 
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur!</p> 
@@ -37,7 +37,7 @@ function addNickname() {
     url: "/index/addnick",
     data: {},
     success: function (nick) {
-      $("#nickname").val(nick["nick"]);
+      $("#nickname").text(nick["nick"] + " 님");
     },
   });
 }

@@ -87,7 +87,7 @@
         let booktitle = $("#booktitle").val().trim()
         let review_content = $("#review_content").val().trim();
         let img_url = $("#image_url")[0]['src'].split('?')[0].trim();
-        let writer = '{{nickname}}'.trim()
+        let writer = $("#nickname").text().split(' ')[0]
         let star_score = parseInt($("#star_score").val());
 
         // FormData 객체에 담아, 전송 준비

@@ -44,11 +44,16 @@
 
 
     <script>
+
       $(document).ready(function () {
         let title = $(document).attr('title');
         render_nav('{{ nickname }}', title);
+        
         addNickname();
+
       });
+
+
 
       // 회원가입 기능
       function sign_up() {

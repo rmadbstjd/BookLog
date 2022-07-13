@@ -47,7 +47,6 @@
 
       let id_value = document.cookie.slice(8);
 
-
       function filter() {
         var value, name, item, i;
 
@@ -77,19 +76,6 @@
         }
       }
 
-
-      /* function getnickname() {
-        $.ajax({
-          type: "POST",
-          url: "/passid",
-          data: {
-            id_value_give: id_value,
-          },
-          success: function (response) {},
-        });
-      } */
-
-
       function listing() {
         $.ajax({
           type: "GET",
@@ -101,7 +87,7 @@
             for (let i = 0; i < rows.length; i++) {
               let content = rows[i]["content"];
               let file = rows[i]["file"];
-              let title = rows[i]["title"];
+              let title = rows[i]["title"].split('(')[0];
               let time = rows[i]["time"];
               let number = rows[i]["content_no"];
               let nickname = rows[i]["writer_nickname"];
