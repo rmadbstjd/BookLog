@@ -108,6 +108,11 @@
         background-color: white;
       }
 
+      .star_img {
+        font-size: 9px;
+        filter: brightness(90%);
+      }
+
       #value {
         width: 500px;
         font-size: 22px;
@@ -167,8 +172,7 @@
               let number = rows[i]["content_no"];
               let nickname = rows[i]["writer_nickname"];
               let star = rows[i]["star_score"];
-              let star_img =
-                '<i class="fa fa-star" aria-hidden="true"></i>'.repeat(star);
+              let star_img = "⭐️".repeat(star);
 
               let temp_html = `<div class="col">
                                   <a href="/detail/${number}" onclick="passdata()">
@@ -182,7 +186,7 @@
                                         <span><h5 class="card-title name">${title}</h5></span>
                                         <div class="nickstar">
                                           <p>${nickname}</p>
-                                          <p>${star_img}</p>
+                                          <p class="star_img">${star_img}</p>
                                         </div>
                                       </div>
                                     </div>

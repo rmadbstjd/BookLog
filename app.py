@@ -1,3 +1,4 @@
+
 from dataclasses import dataclass
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from jinja2 import Undefined
@@ -15,6 +16,16 @@ import certifi
 from werkzeug.utils import secure_filename
 
 ca = certifi.where()
+
+from pymongo import MongoClient
+import jwt
+import datetime
+import hashlib
+import certifi
+import requests
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -48,10 +59,12 @@ def get_nickname():
     print(nickname)
     return render_template("index.html", nickname=nickname)
 
+
 # 상세페이지 @최효선
 @app.route('/detail')
 def detail():
     return render_template("detail.html")
+
 
 @app.route('/detail/reviewData', methods=["GET"])
 def detail_data():
@@ -68,7 +81,6 @@ def detail_bookdata(num):
     book_imageurl = book_list[0]['file']
 
     return render_template("detail.html", book_title=book_title, book_content=book_content, book_imageurl=book_imageurl, book_num=num)
-    
     
 # 작성페이지 @김보현
 @app.route('/edit-page')
@@ -175,19 +187,20 @@ def give_bookInfo():
     result = r.json()
     return result
 
+
 # 로그인페이지 @금윤성
 @app.route('/login')
 def login():
     return render_template("login.html")
 
-# 로그인  @금윤성
+
+
 @app.route('/login/sign_in', methods=['POST'])
 def sign_in():
+    # 로그인
 
     username_receive = request.form['username_give']
     password_receive = request.form['password_give']
-    user_nickname = db.users.find_one({'username': username_receive})
-    nick = user_nickname['nickname']
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     result = db.users.find_one({'username': username_receive, 'password': pw_hash})
     if result is not None:
@@ -203,6 +216,7 @@ def sign_in():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
+
 # 로그인 체크, 닉네임 반환 @금윤성
 @app.route('/login/login_check', methods=['POST'])
 def login_check():
@@ -212,13 +226,12 @@ def login_check():
     if  check_done_receive == 'success':
         return jsonify({'nickname' : user['nickname']})
 
-
 # 회원가입 페이지 @금윤성
 @app.route('/register')
 def register():
     return render_template("register.html")
 
-# 회원가입 명령 @금윤성
+# 기존에 있는 아이디인지 확인 @금윤성
 @app.route('/register/sign_up', methods=['POST'])
 def sign_up():
     username_receive = request.form['username_give']
@@ -237,13 +250,13 @@ def sign_up():
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
-# 기존에 있는 아이디인지 확인 @금윤성
 @app.route('/register/check_dup', methods=['POST'])
 def check_dup():
 
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 
 # 로그인 정보 받기 @금윤성
 @app.route('/index/addnick', methods=['POST'])
@@ -253,7 +266,17 @@ def add_nick():
     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
     nickname = payload['nickname']
 
-    return jsonify({'nick' : nickname})
+    if result is not None:
+        payload = {
+            'id': username_receive,
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+
+        return jsonify({'result': 'success', 'token': token})
+    # 찾지 못하면
+    else:
+        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
 if __name__ == '__main__':
