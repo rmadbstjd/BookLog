@@ -13,7 +13,7 @@ function render_nav(nickname, title) {
           </li>
           <li class="nav-item">
             <a class="nav-link text-dark disabled is-hidden" id="nickname"></a>
-            <a class="nav-link text-dark is-hidden">로그아웃</a>
+            <a class="nav-link text-dark is-hidden" id="logout">로그아웃</a>
           </li>
         </ul>
       </div>
@@ -38,6 +38,7 @@ function addNickname() {
     url: "/index/addnick",
     data: {},
     success: function (nick) {
+      console.log(nick["nick"]);
       $("#nickname").text(nick["nick"] + " 님");
     },
   });
@@ -50,5 +51,6 @@ function hidebtn() {
   } else {
     console.log("로그인이 되어있지 않습니다.");
     $("#nickname").toggleClass("nickname");
+    $("#logout").toggleClass("nickname");
   }
 }
