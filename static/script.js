@@ -6,13 +6,14 @@ function render_nav(nickname, title) {
         <a class="navbar-brand text-dark" href='/'>Booklog</a>
         <ul class="nav justify-content-end">
           <li class="nav-item">
-            <a class="nav-link active text-dark" aria-current="page" href="/login">로그인</a>
+            <a class="nav-link active text-dark" id="for_control_1" aria-current="page" href="/login">로그인</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark" href='/register'>회원가입</a>
+            <a class="nav-link text-dark"id="for_control_2" href='/register'>회원가입</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark disabled" id="nickname"></a>
+            <a class="nav-link text-dark disabled is-hidden" id="nickname"></a>
+            <a class="nav-link text-dark is-hidden">로그아웃</a>
           </li>
         </ul>
       </div>
@@ -40,4 +41,14 @@ function addNickname() {
       $("#nickname").text(nick["nick"] + " 님");
     },
   });
+}
+function hidebtn() {
+  if (document.cookie != "") {
+    console.log("로그인이 되어있습니다.");
+    $("#for_control_1").toggleClass("is-hidden");
+    $("#for_control_2").toggleClass("is-hidden");
+  } else {
+    console.log("로그인이 되어있지 않습니다.");
+    $("#nickname").toggleClass("nickname");
+  }
 }
