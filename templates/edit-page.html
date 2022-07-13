@@ -55,7 +55,7 @@
       
       $(document).ready(function () {
         render_nav('{{nickname}}')
-        $("#star_score").val(star_score)
+        star_score_visualizer(parseInt('{{star_score}}'))
 
         if ( '{{isEdit}}' ) {
           $("#naver_booksearch").empty();
@@ -173,6 +173,24 @@
         }
 
         $("#star_score").val(star_score)
+
+      }
+
+      function star_score_visualizer(input_data) {
+
+        if (input_data == 5) {
+          $("#rating-5").prop('checked',true);
+        } else if (input_data == 4){
+          $("#rating-4").prop('checked',true);
+        } else if (input_data == 3){
+          $("#rating-3").prop('checked',true);
+        } else if (input_data == 2){
+          $("#rating-2").prop('checked',true);
+        } else if (input_data == 1){
+          $("#rating-1").prop('checked',true);
+        } else {
+          $("#rating-1").prop('checked',false);
+        }
 
       }
 
