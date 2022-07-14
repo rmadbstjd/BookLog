@@ -86,8 +86,10 @@
 
 function render_nav(nickname, title) {
   let nav_html = `<nav class="navbar bg-light justify-content-md-center" id="nav">
-      <div class="container-fluid p-3 px-5">
-        <a class="navbar-brand text-dark" href='/'>Booklog</a>
+      <div class="container-fluid px-5 bg-white">
+        <a class="navbar-brand " href='/'>
+        <img class="img-concert" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/54e906b5-336b-4cef-861e-8411e7a93b3a/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T072943Z&X-Amz-Expires=86400&X-Amz-Signature=208db2b1840cb1555d0049971ded9cb2ecaa3f57d755808d2e0899c09f1145f8&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject"/>
+        </a>
         <ul class="nav justify-content-end">
           <li class="nav-item">
             <a class="nav-link active text-dark" id="for_control_1" aria-current="page" href="/login">로그인</a>
@@ -102,13 +104,10 @@ function render_nav(nickname, title) {
         </ul>
       </div>
       </nav>
-      <div class="jumbotron p-5 p-md-5 text-white rounded bg-info">
-        <div class="col-md-8 px-0">
-          <h1 class="display-4 font-italic">${title}</h1>
-          <p class="lead my-3">책을 읽고 느낀 것들을 공유하는 공간 - 
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur!</p> 
-        </div>
-      </div>
+      <div class="book-top-bar"> </div>
+      
+      
+      
       `;
 
   $("#header_above").append(nav_html);

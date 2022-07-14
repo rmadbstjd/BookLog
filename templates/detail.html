@@ -19,7 +19,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 
-    <title>내가 읽은 책 상세페이지</title>
+    <title>BookLog Detail Page</title>
 
     <!-- Local CSS & JS import -->
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
@@ -27,19 +27,16 @@
     <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
     <style>
-        * {
+{#        * {
             color :  black;
         }
 
         body {
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.the-pr.co.kr/news/photo/202205/48786_75742_1814.jpg');
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://s3.us-west-2.amazonaws.com/secure.notion-static.com/ba10c5f1-e098-45fd-b145-1f7f79a2703e/KakaoTalk_Image_2022-07-14-16-16-40.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220714%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220714T071727Z&X-Amz-Expires=86400&X-Amz-Signature=f66e3e3714813440ef64d77af070921059937579372e7868ac73e1d2fe7faab8&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22KakaoTalk_Image_2022-07-14-16-16-40.png%22&x-id=GetObject');
             background-position: center;
             background-size: cover;
-        }
+        }#}
 
-        h1 {
-            font-weight: bold;
-        }
 
         .detail {
             width: 500px;
@@ -113,7 +110,7 @@
             <h1>BookLog Detail Page</h1>
 
             <div class="show_book" >
-                <img src="{{book_imageurl}}" class="card-img-top" alt="Img">
+                <img src="{{book_imageurl}}" class="card-img-top1" alt="Img">
                 <div class="card-body">
                     <table class="table">
                         <thead>
