@@ -1,4 +1,4 @@
-(function (factory) {
+﻿(function (factory) {
   if (typeof define === "function" && define.amd) {
     define(["jquery"], factory);
   } else if (typeof exports === "object") {
@@ -142,14 +142,14 @@ function addNickname() {
 function hidebtn() {
   if (document.cookie != "") {
     console.log("로그인이 되어있습니다.");
-    $("#for_control_1").toggleClass("is-hidden");
-    $("#for_control_2").toggleClass("is-hidden");
+    $("#for_control_1").hide();
+    $("#for_control_2").hide();
     $("#nickname").toggleClass("is-hidden");
     $("#logout").toggleClass("is-hidden");
     addNickname();
   } else {
     console.log("로그인이 되어있지 않습니다.");
-    $("#nickname").toggleClass("nickname");
-    $("#logout").toggleClass("nickname");
+    $("#nickname").hide();
+    $("#logout").hide();
   }
 }
