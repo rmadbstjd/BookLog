@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
+
     <!-- Webpage Title -->
     <title>Log In</title>
 
@@ -10,13 +11,13 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-
-
     <!-- Bulma CSS -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
     />
+
+
     <!-- Font Awesome CSS , Bootstrap JS,CSS -->
     <link
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -33,7 +34,7 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    
+
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -43,12 +44,13 @@
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
     <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
     <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
-  
+
     <script>
 
       $(document).ready(function () {
         let title = $(document).attr('title');
         render_nav('{{ nickname }}', title);
+        hidebtn()
         addNickname();
       });
 
@@ -129,7 +131,7 @@
 
   <body>
     <header id="header_above"></header>
-    
+
     <section class="section">
       <div class="container">
         <div class="box" style="max-width: 480px; margin: auto">

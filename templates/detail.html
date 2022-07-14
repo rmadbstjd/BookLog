@@ -1,10 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <!-- Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -24,7 +28,7 @@
 
     <style>
         * {
-            color: white;
+            color :  black;
         }
 
         body {
@@ -54,16 +58,18 @@
             let title = $(document).attr('title');
             render_nav('{{ nickname }}', title);
             show_detail();
-            
             addNickname();
+            hidebtn();
+            is_login_state();
         });
-    
+
             function show_detail() {
                 $.ajax({
                     type: 'GET',
                     url: '/detail/reviewData',
                     data: {},
                     success: function (response) {
+
                         let rows = response['bookData']
                         for (let i = 0; i< rows.length; i++ ){
                             let title = rows[i]['title']
@@ -72,12 +78,28 @@
                             let time = rows[i]['time']
                             let content_no = rows[i]['content_no']
                             console.log(content_no, title, content,time,file)
-    
+
                         }
                     }
                 });
             }
-            
+
+        function is_login_state () {
+
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "/detail/login",
+                    data: {},
+                    success: function () {
+
+                        $('#id-edit').addClass("is-hidden")
+                        $('#id-delete').addClass("is-hidden")
+
+                    },
+                });
+        }
+
 
         </script>
 
@@ -89,7 +111,7 @@
         <div class="mask"></div>
         <div class="detail">
             <h1>BookLog Detail Page</h1>
-        
+
             <div class="show_book" >
                 <img src="{{book_imageurl}}" class="card-img-top" alt="Img">
                 <div class="card-body">
@@ -107,7 +129,7 @@
                             <th scope="row">별점 : {{ book_score }}</th>
                         </tr>
                         <tr>
-                            <th scope="row">책 내용 : {{book_content}}
+                            <th scope="row">책 내용 : {{book_content | safe}}
                             </th>
                         </tr>
                         </tbody>
@@ -116,12 +138,12 @@
             </div>
             <div style="display: flex; justify-content: center;">
                       <a href="/" class="btn btn-warning mybtn">Home</a>
-                      <a href="/edit/{{book_num}}" class="btn btn-warning mybtn">Edit</a>
-                      <a href="/delete/{{book_num}}" class="btn btn-warning mybtn">Delete</a>
+                      <a href="/edit/{{book_num}}" class="btn btn-warning mybtn" id="id-edit">Edit</a>
+                      <a href="/delete/{{book_num}}" class="btn btn-warning mybtn" id="id-delete">Delete</a>
             </div>
-        
+
             </div>
-        
+
         </div>
         </body>
         </html>
