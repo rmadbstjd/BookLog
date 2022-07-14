@@ -1,88 +1,10 @@
-* {
-  font-family: "Gowun Batang", serif;
-}
-
-.topbtn {
-  float: right;
-  width: 400px;
-  text-align: right;
-  margin-top: 30px;
-  margin-right: 25px;
-}
-
-.btn-secondary {
-  background-color: #8f4700;
-}
-
-.topbtn > button {
-  margin-left: 12px;
-}
-
-.topbtn > a {
-  margin-right: 10px;
-}
-
-.MainTitle {
-  color: #8f4700;
-  text-align: center;
-  padding-top: 60px;
-  margin-top: -14px;
-  margin-bottom: 20px;
-  margin-left: 430px;
-
-  font-weight: 800;
-  font-size: 5rem;
-  font-family: "Dongle", sans-serif;
-}
-
 .body {
   width: 95%;
 }
 
 .searchbox {
-  width: 100%;
-  text-align: center;
-}
-
-.writebtn {
-  float: right;
-  margin-right: 40px;
-  margin-bottom: 10px;
-}
-
-.body > p {
-  text-align: center;
-}
-
-.row {
-  margin-top: 50px;
-  width: 100%;
-}
-
-.name {
-  margin-bottom: -5px;
-}
-
-.item > p {
-  margin-top: -5px;
-}
-
-.col > a {
-  text-decoration: none;
-  color: black;
-}
-
-#value {
-  width: 500px;
-  font-size: 22px;
-}
-
-.card {
-  border-radius: 10px;
-  background-color: whitesmoke;
-}
-
-.card > img {
-  height: 30vh;
-  border-radius: 10px;
+  width: 850px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 22px;
 }
