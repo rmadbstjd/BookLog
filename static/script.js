@@ -96,8 +96,8 @@ function render_nav(nickname, title) {
             <a class="nav-link text-dark"id="for_control_2" href='/register'>회원가입</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-dark disabled is-hidden" id="nickname"></a>
-            <a class="nav-link text-dark is-hidden" id="logout" onclick="click_logout()">로그아웃</a>
+            <a class="nav-link text-dark disabled" id="nickname"></a>
+            <a class="nav-link text-dark" id="logout" onclick="click_logout()">로그아웃</a>
           </li>
         </ul>
       </div>
@@ -141,15 +141,15 @@ function addNickname() {
 }
 function hidebtn() {
   if (document.cookie != "") {
-    console.log("로그인이 되어있습니다.");
-    $("#for_control_1").toggleClass("is-hidden");
-    $("#for_control_2").toggleClass("is-hidden");
-    $("#nickname").toggleClass("is-hidden");
-    $("#logout").toggleClass("is-hidden");
+    //로그인이 되었습니다.
+    $("#for_control_1").hide();
+    $("#for_control_2").hide();
+    console.log("됏다");
     addNickname();
   } else {
-    console.log("로그인이 되어있지 않습니다.");
-    $("#nickname").toggleClass("nickname");
-    $("#logout").toggleClass("nickname");
+    //로그인이 안 되었습니다.
+    console.log("안됏다");
+    $("#nickname").hide();
+    $("#logout").hide();
   }
 }
