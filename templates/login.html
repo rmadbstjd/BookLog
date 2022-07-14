@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
+
     <!-- Webpage Title -->
-    <title>Log In | BookLog</title>
+    <title>Log In</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8" />
@@ -11,62 +12,45 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
-    <!-- Bulma CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-    />
-    <!-- Font Awesome CSS -->
+
+
+    <!-- Font Awesome CSS , Bootstrap JS,CSS -->
     <link
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
+
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-    <style>
-      body {
-        background-color: RGBA(0, 133, 101, 0.2);
-        min-height: 100vh;
-      }
 
-      .section {
-        padding: 1rem 1.5rem;
-        max-width: 750px;
-        margin: auto;
-      }
+    <!-- Local CSS & JS import -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
+    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
-      .title {
-        font-weight: 800;
-        font-size: 5rem;
-        font-family: "Dongle", sans-serif;
-      }
-
-      .subtitle {
-        font-size: 2rem;
-        font-family: "Nanum Brush Script", cursive;
-      }
-
-      .is-sparta {
-        color: #8f4700 !important;
-      }
-      .button.is-sparta {
-        background-color: #8f4700;
-        border-color: transparent;
-        color: #fff !important;
-      }
-
-      .button.is-sparta.is-outlined {
-        background-color: transparent;
-        border-color: #8f4700;
-        color: #240000 !important;
-      }
-    </style>
     <script>
-      // {% if msg %}
-      //     alert("{{ msg }}")
-      // {% endif %}
+
+      $(document).ready(function () {
+        let title = $(document).attr('title');
+        render_nav('{{ nickname }}', title);
+        hidebtn()
+        addNickname();
+      });
+
       function sign_in() {
         let username = $("#input-username").val();
         let password = $("#input-password").val();
@@ -97,7 +81,7 @@
           },
           success: function (response, id) {
             if (response["result"] == "success") {
-              $.cookie("mytoken", response[("token", "id")], { path: "/" });
+              $.cookie("mytoken", response["token"], { path: "/" });
               login_check(response);
 
               window.location.replace("/");
@@ -107,6 +91,7 @@
           },
         });
       }
+
       function login_check(response) {
         let check = response["result"];
         let check_id = response["id"];
@@ -128,6 +113,7 @@
         let regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
         return regExp.test(asValue);
       }
+
       function is_nick(asValue) {
         let regExp = /^[가-힣]{2,4}$/;
         return regExp.test(asValue);
@@ -136,18 +122,13 @@
       function toggle_sign_up() {
         window.location.href = "/register";
       }
+
     </script>
   </head>
+
   <body>
-    <section class="hero is-white">
-      <div
-        class="hero-body has-text-centered"
-        style="padding-bottom: 1rem; margin: auto"
-      >
-        <h1 class="title is-sparta">BookLog</h1>
-        <h3 class="subtitle is-sparta">책을 읽고 느낀 것들을 공유하는 공간</h3>
-      </div>
-    </section>
+    <header id="header_above"></header>
+
     <section class="section">
       <div class="container">
         <div class="box" style="max-width: 480px; margin: auto">

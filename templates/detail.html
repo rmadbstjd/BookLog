@@ -1,13 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <!-- Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+    />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -17,12 +21,12 @@
 
     <title>내가 읽은 책 상세페이지</title>
 
-    <style>
-        * {
-            font-family: 'Gowun Batang', serif;
-            color: white;
-        }
+    <!-- Local CSS & JS import -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
+    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
+    <style>
         body {
             background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://www.the-pr.co.kr/news/photo/202205/48786_75742_1814.jpg');
             background-position: center;
@@ -45,73 +49,95 @@
 
     </style>
     <script>
+
         $(document).ready(function () {
+            let title = $(document).attr('title');
+            render_nav('{{ nickname }}', title);
             show_detail();
+            addNickname();
+            hidebtn();
+            is_login_state();
         });
 
-        function show_detail() {
-            $.ajax({
-                type: 'GET',
-                url: '/detail/reviewData',
-                data: {},
-                success: function (response) {
-                    let rows = response['bookData']
-                    for (let i = 0; i< rows.length; i++ ){
-                        let title = rows[i]['title']
-                        let content = rows[i]['content']
-                        let file = rows[i]['file']
-                        let time = rows[i]['time']
-                        let content_no = rows[i]['content_no']
-                        console.log(content_no, title, content,time,file)
+            function show_detail() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/detail/reviewData',
+                    data: {},
+                    success: function (response) {
 
+                        let rows = response['bookData']
+                        for (let i = 0; i< rows.length; i++ ){
+                            let title = rows[i]['title']
+                            let content = rows[i]['content']
+                            let file = rows[i]['file']
+                            let time = rows[i]['time']
+                            let content_no = rows[i]['content_no']
+                            console.log(content_no, title, content,time,file)
+
+                        }
                     }
-                }
-            });
+                });
+            }
+
+        function is_login_state () {
+
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "/detail/login",
+                    data: {},
+                    success: function () {
+
+                        $('#id-edit').addClass("is-hidden")
+                        $('#id-delete').addClass("is-hidden")
+
+                    },
+                });
         }
 
-    </script>
+
+        </script>
 </head>
-<body>
-<div class="mask"></div>
-<div class="detail">
-    <h1>BookLog Detail Page</h1>
+    <body>
+        <header id="header_above"></header>
 
-    <div class="show_book" >
-        <img src="http://placeimg.com/640/480/any" class="card-img-top" alt="Img">
-        <div class="card-body">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">책 제목 : {{book_title}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row">책 번호 : {{reviewNo}} </th>
-                </tr>
-                <tr>
-                    <th scope="row">책 내용 : {{reviewNo}} {{book_content}}
-                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-                Some quick example text to build on the card title and make up the bulk of the card's content.</th>
-                </tr>
-                </tbody>
-            </table>
+        <div class="mask"></div>
+        <div class="detail">
+            <h1>BookLog Detail Page</h1>
+
+            <div class="show_book" >
+                <img src="{{book_imageurl}}" class="card-img-top" alt="Img">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">책 제목 : {{book_title}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">책 번호 : {{ book_num }} / 작성자 : {{book_nick}} / 작성일 {{book_time}}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">별점 : {{ book_score }}</th>
+                        </tr>
+                        <tr>
+                            <th scope="row">책 내용 : {{book_content | safe}}
+                            </th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                      <a href="/" class="btn btn-warning mybtn">Home</a>
+                      <a href="/edit/{{book_num}}" class="btn btn-warning mybtn" id="id-edit">Edit</a>
+                      <a href="/delete/{{book_num}}" class="btn btn-warning mybtn" id="id-delete">Delete</a>
+            </div>
+
+            </div>
+
         </div>
-    </div>
-    <div style="display: flex; justify-content: center;">
-        <a href="/templates/edit-page.html" class="btn btn-warning mybtn">Edit</a>
-        <a href="/templates/edit-page.html" class="btn btn-warning mybtn">Delete</a>
-        <a href="/templates/index.html" class="btn btn-warning mybtn">Home</a>
-    </div>
-
-    </div>
-
-</div>
-</body>
-</html>
+        </body>
+        </html>

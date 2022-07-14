@@ -12,12 +12,14 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
+
+
+
     <!-- Font Awesome CSS -->
     <link
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
-    <!-- Bulma CSS -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
@@ -30,99 +32,23 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <title>BookLog</title>
 
-    <title>BookLog 메인페이지</title>
+    <!-- Local CSS & JS import -->
+    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
+    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
-    <style>
-      .MainTitle {
-        text-align: center;
-
-        font-weight: 800;
-        font-size: 5rem;
-        font-family: "Dongle", sans-serif;
-      }
-
-      .body {
-        width: 95%;
-      }
-
-      .searchbox {
-        width: 100%;
-        text-align: center;
-      }
-
-      .body > p {
-        text-align: center;
-      }
-
-      .row {
-        margin-top: 50px;
-        width: 100%;
-      }
-
-      .card {
-        width: 300px;
-        height: 520px;
-        margin-bottom: 40px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .nickstar {
-        margin-top: 12px;
-      }
-
-      .name {
-        margin-bottom: -5px;
-      }
-
-      .item > p {
-        margin-top: -5px;
-      }
-
-      .col > a {
-        text-decoration: none;
-        color: black;
-      }
-
-      .card {
-        border-radius: 10px;
-        background-color: whitesmoke;
-      }
-
-      .card > img {
-        width: 252px;
-        height: 373px;
-        object-position: center;
-
-        margin: auto;
-        margin-top: 20px;
-        margin-left: auto;
-        margin-right: auto;
-
-        border-radius: 10px;
-      }
-
-      body {
-        background-color: white;
-      }
-
-      .star_img {
-        font-size: 9px;
-        filter: brightness(90%);
-      }
-
-      #value {
-        width: 500px;
-        font-size: 22px;
-      }
-    </style>
     <script type="text/javascript">
       $(document).ready(function () {
+
+        let title = $(document).attr('title');
+        render_nav('{{ nickname }}', title);
+
         listing();
         hidebtn();
-        // getnickname();
+
+        addNickname();
       });
 
       let id_value = document.cookie.slice(8);
@@ -150,24 +76,26 @@
         }
       }
 
-      function hidebtn() {
-        if (document.cookie != "") {
-          $("#navbar").toggleClass("is-hidden");
-        } else {
-          $("#header").toggleClass("is-hidden");
-        }
+      function addnick() {
+        $.ajax(
+          {
+              type: "POST",
+              url: "/index/addnick",
+              data: {
+              },
+              success: function(nick) {
+                $("#nickname").text(nick["nick"])
+              },
+        });
       }
 
-      /* function getnickname() {
-        $.ajax({
-          type: "POST",
-          url: "/passid",
-          data: {
-            id_value_give: id_value,
-          },
-          success: function (response) {},
-        });
-      } */
+      function cantclick() {
+        if (document.cookie == "") {
+          alert("로그인을 해주세요.")
+        }else {
+          window.location.href = '/edit-page'
+        }
+      }
 
       function listing() {
         $.ajax({
@@ -180,7 +108,7 @@
             for (let i = 0; i < rows.length; i++) {
               let content = rows[i]["content"];
               let file = rows[i]["file"];
-              let title = rows[i]["title"];
+              let title = rows[i]["title"].split('(')[0];
               let time = rows[i]["time"];
               let number = rows[i]["content_no"];
               let nickname = rows[i]["writer_nickname"];
@@ -210,67 +138,52 @@
           },
         });
       }
+
+
     </script>
   </head>
+
   <body>
-    <div id="header" class="header">
-      <a>{{ nickname }}</a>
-      <button type="button" class="is-hidden logout">로그아웃</button>
-      <div class="topbtn" id="navbar">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="window.location.href = '/login'"
-        >
-          로그인
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          onclick="window.location.href = '/register'"
-        >
-          회원가입
-        </button>
-      </div>
-    </div>
-    <h1 class="MainTitle">BookLog</h1>
-    <div class="header">
-      <div class="input-group searchbox">
-        <input
-          type="text"
-          id="value"
-          class="form-control"
-          placeholder="Type to Search"
-          aria-label="Recipient's username with two button addons"
-          onkeyup="enterkey()"
-        />
-        <button
-          class="btn btn-outline-secondary filterbtn"
-          type="button"
-          onclick="filter()"
-        >
-          <i class="fa fa-search bodybtn" aria-hidden="true"></i>
-        </button>
-        <button
-          class="btn btn-outline-secondary"
-          type="button"
-          onclick="window.location.reload()"
-        >
-          <i class="fa fa-home bodybtn" aria-hidden="true"></i>
-        </button>
-        <button
-          class="btn btn-outline-secondary"
-          type="button"
-          onclick="window.location.href = '/edit-page'"
-        >
-          글작성
-        </button>
+
+    <header id="header_above"></header>
+    <div class="searchbox mt-5">
+      <div class="header">
+        <div class="input-group searchbox">
+          <input
+            type="text"
+            id="value"
+            class="form-control"
+            placeholder="Type to Search"
+            aria-label="Recipient's username with two button addons"
+            onkeyup="enterkey()"
+          />
+          <button
+            class="btn btn-outline-secondary filterbtn"
+            type="button"
+            onclick="filter()"
+          >
+            <i class="fa fa-search bodybtn" aria-hidden="true"></i>
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            onclick="window.location.reload()"
+          >
+            <i class="fa fa-home bodybtn" aria-hidden="true"></i>
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            onclick="cantclick()"
+          >
+            글작성
+          </button>
+        </div>
       </div>
     </div>
     <div class="body container">
       <!-- <p>검색</p> -->
-      <div id="books_container" class="row row-cols-2 row-cols-md-4"></div>
+      <div id="books_container" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4"></div>
     </div>
-    <div class="footer"></div>
   </body>
 </html>

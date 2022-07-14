@@ -2,7 +2,7 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <title>북로그 수정</title>
+    <title>Booklog 작성</title>
     <!-- JQuery & Bootstrap import -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -16,31 +16,60 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
+
 
     <!-- Local CSS & JS import -->
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
     <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
     <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
 
-    <!-- 이 페이지만 : 파일업로더 라이브러리 -->
-    <!--  <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script> -->
 
-    <!-- 이 페이지 전용 script -->
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+
     <script>
 
       $(document).ready(function () {
-        render_nav('{{ nickname }}')
-        star_score_visualizer(parseInt('{{star_score}}'))
+
+        let title = $(document).attr('title');
+        render_nav('{{ nickname }}', title);
+
+
+        star_score_visualizer(parseInt('{{star_score}}'));
+        addNickname();
+        hidebtn();
 
         if ( '{{isEdit}}' ) {
           $("#naver_booksearch").empty();
-          $("#review_content").val("{{content}}")
+          $("#review_content").val(`{{content | safe}}`)
           $("#star_score").val("{{star_score}}")
         }
+
+        $('#review_content').summernote({
+          height: 500,                 // set editor height
+          minHeight: null,             // set minimum height of editor
+          maxHeight: null,             // set maximum height of editor
+          focus: true,
+          placeholder: '책을 읽고난 감상을 적어주세요',
+
+          toolbar: [
+			    // [groupName, [list of button]]
+			    ['fontname', ['fontname']],
+			    ['fontsize', ['fontsize']],
+			    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+			    ['color', ['forecolor','color']],
+			    ['table', ['table']],
+			    ['para', ['ul', 'ol', 'paragraph']],
+			    ['height', ['height']],
+			    ['insert',['picture','link','video']],
+			    ['view', ['fullscreen', 'help']]
+			  ],
+			fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋음체','바탕체'],
+			fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
+        });
+
       });
 
       function booksearch_listing() {
@@ -68,22 +97,24 @@
                               선택
                             </a></td>
                                 </tr>`;
-                                
+
               $("#selectData_table").append(temp_html);
               console.log(data)
             }
           },
         });
 
-      } 
+      }
+
+
 
       function posting() {
 
         // 포스팅할 데이터 취합
         let booktitle = $("#booktitle").val().trim()
-        let review_content = $("#review_content").val().trim();
+        let review_content = $("#review_content").val();
         let img_url = $("#image_url")[0]['src'].split('?')[0].trim();
-        let writer = '{{nickname}}'.trim()
+        let writer = $("#nickname").text().split(' ')[0]
         let star_score = parseInt($("#star_score").val());
 
         // FormData 객체에 담아, 전송 준비
@@ -91,16 +122,16 @@
 
         form_data.append("imgfile_give", img_url);
         form_data.append("booktitle_give", booktitle);
-        form_data.append("review_content_give", review_content);
+        form_data.append("review_content_give",review_content);
         form_data.append("writer_nickname", writer);
         form_data.append("star_score", star_score);
 
-        // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert) 
-        // data에 "form_data" 객체를 담아 전송 
+        // ajax : POST 방식으로 save-review 주소에 전송 (python에서 처리한 후 response 보내면, msg 찾아 alert)
+        // data에 "form_data" 객체를 담아 전송
 
         // 기존리뷰 수정이면 review_no 전달해서 업데이트 POST
         if ( '{{isEdit}}' ) {
-          form_data.append("edited_content_no", {{review_no}}); 
+          form_data.append("edited_content_no", {{review_no}});
 
           $.ajax({
             type: "POST",
@@ -110,10 +141,14 @@
             contentType: false,
             processData: false,
             success: function (response) {
-              window.location.href = '/';
+
+              alert('수정이 완료되었습니다.')
+              window.location.href = "/";
             },
           });
-        } else {
+
+        }else{
+
           // 신규이면 저장 기능 POST
           $.ajax({
             type: "POST",
@@ -123,28 +158,14 @@
             contentType: false,
             processData: false,
             success: function (response) {
+
+              alert('등록이 완료되었습니다.')
               window.location.href = '/';
             },
           });
-  
+
         }
 
-      }
-
-      function addnick() {
-        $.ajax(
-          {
-              type: "POST",
-              url: "/index/addnick",
-              data: {
-              },
-              success: function(nick) {
-        
-                temp=`<a id="nicknamebar">${nick["nick"]} 님</a>`
-                $("#navbar").append(temp)
-
-              },
-        });
       }
 
       function star_score_calculator() {
@@ -191,19 +212,10 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-light" id="nav">
-    </nav>
 
-    <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
-      <div class="col-md-6 px-0">
-        <h1 class="display-4 font-italic">Booklog 작성</h1>
-        <p class="lead my-3">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut dolor corrupti consequuntur est natus quaerat distinctio laborum obcaecati impedit incidunt!</p> 
+    <header id="header_above"></header>
 
-      </div>
-    </div>
-
-
-    <div class="container mt-5"> 
+    <div class="container mt-5">
       <div class="mb-5" id="naver_booksearch">
         <label for="booknameSearch" class="form-label">네이버 도서 검색</label>
         <div class="input-group mb-3">
@@ -219,14 +231,14 @@
           <img id="image_url" src="{{image}}" class="img-fluid" alt="" >
           <span>표지이미지</span>
           {%endif%}
-          
+
         </div>
 
         <div class="mb-3">
           <label for="booktitle" class="form-label">책 제목</label>
           <input type="text" class="form-control" id="booktitle" placeholder="책 제목을 입력해주세요." value="{% if title %} {{title}} {% else %}책제목{%endif%}" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 ">
           <label for="star_score" class="form-label">내 평점</label>
           <input type="text" class="form-control d-none" id="star_score"> <!--숨겨짐-->
           <div class="rating" onclick="star_score_calculator();">
@@ -245,7 +257,7 @@
         </div>
         <div class="mb-3">
           <label for="review_content" class="form-label" >책 감상평</label>
-          <textarea class="form-control" id="review_content" rows="20" required></textarea>
+          <textarea id="review_content" name="editordata" required></textarea>
         </div>
         <div class="mb-3 text-center">
         <button type="submit" class="btn btn-primary" onclick="posting();">등록</button>
@@ -274,7 +286,7 @@
                 <tbody id="selectData_table">
                 </tbody>
               </table>
-              
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -285,4 +297,3 @@
     </div>
   </body>
 </html>
-
