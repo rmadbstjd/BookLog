@@ -12,23 +12,6 @@
       href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
     />
-
-    <!-- Bulma CSS -->
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-      />
-
-    <!-- Font Awesome CSS -->
-    <link
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-    />
-
     <!-- JQuery를 import 합니다 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
@@ -36,158 +19,239 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <title>BookLog</title>
-
-    <!-- Local CSS & JS import -->
-    <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}"/>
-    <link rel="stylesheet" href="{{ url_for("static", filename="star_rating.css") }}"/>
-    <script type="text/javascript"  src="{{ url_for("static", filename="script.js") }}"></script>
-
-    <script type="text/javascript">
-      $(document).ready(function () {
-
-        let title = $(document).attr('title');
-        render_nav('{{ nickname }}', title);
-
-        listing();
-        hidebtn();
-
-        addNickname();
-      });
-
-      let id_value = document.cookie.slice(8);
-
-      function filter() {
-        var value, name, item, i;
-
-        value = document.getElementById("value").value.toUpperCase();
-        item = document.getElementsByClassName("item");
-
-        for (i = 0; i < item.length; i++) {
-          name = item[i].getElementsByClassName("name");
-          if (name[0].innerHTML.toUpperCase().indexOf(value) > -1) {
-            item[i].style.display = "";
-          } else {
-            let colelements = item[i].parentElement.parentElement.parentElement;
-            colelements.style.display = "none";
-          }
-        }
-      }
-
-      function enterkey() {
-        if (window.event.keyCode == 13) {
-          filter();
-        }
-      }
-
-      function addnick() {
-        $.ajax(
-          {
-              type: "POST",
-              url: "/index/addnick",
-              data: {
-              },
-              success: function(nick) {
-                $("#nickname").text(nick["nick"])
-              },
-        });
-      }
-
-      function cantclick() {
-        if (document.cookie == "") {
-          alert("로그인을 해주세요.")
-        }else {
-          window.location.href = '/edit-page'
-        }
-      }
-
-      function listing() {
-        $.ajax({
-          type: "GET",
-          url: "/review_test",
-          data: {},
-          success: function (response) {
-            let rows = response["books"];
-            //console.log(rows);
-            for (let i = 0; i < rows.length; i++) {
-              let content = rows[i]["content"];
-              let file = rows[i]["file"];
-              let title = rows[i]["title"].split('(')[0];
-              let time = rows[i]["time"];
-              let number = rows[i]["content_no"];
-              let nickname = rows[i]["writer_nickname"];
-              let star = rows[i]["star_score"];
-              let star_img = "⭐️".repeat(star);
-
-              let temp_html = `<div class="col">
-                                  <a href="/detail/${number}" onclick="passdata()">
-                                    <div class="card">
-                                      <img
-                                        src="${file}"
-                                        class="card-img-top"
-                                        alt="${title}"
-                                      />
-                                      <div class="card-body item">
-                                        <span><h5 class="card-title name">${title}</h5></span>
-                                        <div class="nickstar">
-                                          <p>${nickname}</p>
-                                          <p class="star_img">${star_img}</p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </a>
-                                </div>`;
-              $("#books_container").append(temp_html);
-            }
-          },
-        });
-      }
-
-    
-    </script>
+    <title>BookLog 메인페이지</title>
   </head>
+  <style>
+    .header {
+      display: flex;
+    }
+    .btn-secondary {
+      justify-content: flex-end;
+      margin: 3px 3px 3px 6px;
+    }
 
+    .MainTitle {
+      text-align: center;
+    }
+
+    .body {
+      width: 95%;
+    }
+
+    .body > p {
+      text-align: center;
+    }
+
+    .row {
+      margin-top: 50px;
+      width: 100%;
+    }
+
+    .card {
+      width: 300px;
+      height: 520px;
+      margin-bottom: 40px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .col > a {
+      text-decoration: none;
+      color: black;
+    }
+
+    .card {
+      border-radius: 10px;
+    }
+
+    .card > img {
+      width: 252px;
+      height: 373px;
+      object-fit: cover;
+
+      display: block;
+      margin: auto;
+      margin-top: 15px;
+      margin-left: auto;
+      margin-right: auto;
+
+      border-radius: 10px;
+    }
+  </style>
+  <script type="text/javascript">
+    function filter() {
+      var value, name, item, i;
+
+      value = document.getElementById("value").value.toUpperCase();
+      item = document.getElementsByClassName("item");
+
+      for (i = 0; i < item.length; i++) {
+        name = item[i].getElementsByClassName("name");
+        if (name[0].innerHTML.toUpperCase().indexOf(value) > -1) {
+          item[i].style.display = "flex";
+        } else {
+          // item[i].style.display = "none";
+          let colelements = item[i].parentElement.parentElement.parentElement;
+          colelements.style.display = "none";
+        }
+      }
+    }
+
+    // document.getElementById("value").addEventListener("keyup", function (e) {
+    //   if (e.keyCode === 13) {
+    //     document.getElementById("inputbtn").click();
+    //   }
+    // });
+  </script>
   <body>
-
-    <header id="header_above"></header>
-    <div class="searchbox mt-5">
-      <div class="header">
-        <div class="input-group searchbox">
-          <input
-            type="text"
-            id="value"
-            class="form-control"
-            placeholder="Type to Search"
-            aria-label="Recipient's username with two button addons"
-            onkeyup="enterkey()"
-          />
+    <div class="header">
+      <button type="button" class="btn btn-secondary">로그인</button>
+      <button type="button" class="btn btn-secondary">회원가입</button>
+    </div>
+    <h1 class="MainTitle">BookLog</h1>
+    <body>
+      <div class="searchbox">
+        <div class="header">
+          <input type="text" id="value" placeholder="Type to Search" />
           <button
-            class="btn btn-outline-secondary filterbtn"
-            type="button"
             onclick="filter()"
+            id="inputbtn"
+            class="btn btn-secondary filterbtn"
           >
-            <i class="fa fa-search bodybtn" aria-hidden="true"></i>
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <!-- 찾기버튼 -->
           </button>
           <button
-            class="btn btn-outline-secondary"
             type="button"
-            onclick="window.location.reload()"
+            onclick="window.location.href='/templates/index.html'"
+            class="btn btn-secondary filterbtn"
           >
-            <i class="fa fa-home bodybtn" aria-hidden="true"></i>
+            <i class="fa fa-home" aria-hidden="true"></i>
+            <!-- 홈버튼 -->
           </button>
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            onclick="cantclick()"
-          >
-            글작성
-          </button>
+          <button type="button" class="btn btn-secondary">작성</button>
+        </div>
+      </div>
+    </body>
+    <div class="body container">
+      <!-- <p>검색</p> -->
+      <div class="row row-cols-1 row-cols-md-3">
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <span><h5 class="card-title name">불편한 편의점</h5></span>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">편한 편의점</h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">싼편의점</h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">불친절한 편의점</h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">집앞 편의점</h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">비싼 편의점</h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">이상한 편의점</h5>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col">
+          <a href="/">
+            <div class="card">
+              <img
+                src="https://bookthumb-phinf.pstatic.net/cover/189/260/18926010.jpg?udate=20220623"
+                class="card-img-top"
+                alt="..."
+              />
+              <div class="card-body item">
+                <h5 class="card-title name">이웃집 편의점</h5>
+              </div>
+            </div>
+          </a>
         </div>
       </div>
     </div>
-    <div class="body container">
-      <!-- <p>검색</p> -->
-      <div id="books_container" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4"></div>
+    <div class="footer">
+      <p>바닥</p>
     </div>
   </body>
 </html>
